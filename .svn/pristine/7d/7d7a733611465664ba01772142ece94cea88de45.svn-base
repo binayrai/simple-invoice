@@ -1,0 +1,234 @@
+package com.itexpertnepal.simpleinvoice.api.impl;
+
+import com.itexpertnepal.simpleinvoice.api.BillerManager;
+import com.itexpertnepal.simpleinvoice.api.CustomerManager;
+import com.itexpertnepal.simpleinvoice.api.InvoiceManager;
+import com.itexpertnepal.simpleinvoice.api.ProductManager;
+import com.itexpertnepal.simpleinvoice.domain.Biller;
+import com.itexpertnepal.simpleinvoice.domain.Customer;
+import com.itexpertnepal.simpleinvoice.domain.CustomerAccount;
+import com.itexpertnepal.simpleinvoice.domain.CustomerService;
+import com.itexpertnepal.simpleinvoice.domain.Invoice;
+import com.itexpertnepal.simpleinvoice.domain.InvoiceDetails;
+import com.itexpertnepal.simpleinvoice.domain.Product;
+import com.itexpertnepal.simpleinvoice.repository.CustomerAccountRepository;
+import com.itexpertnepal.simpleinvoice.repository.CustomerServiceRepository;
+import com.itexpertnepal.simpleinvoice.repository.InvoiceDetailsRepository;
+import com.itexpertnepal.simpleinvoice.repository.InvoiceRepository;
+import com.itexpertnepal.simpleinvoice.utilities.StringUtls;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author binay
+ */
+@Service
+@Transactional(readOnly = true)
+class InvoiceManagerImpl implements InvoiceManager {
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private InvoiceDetailsRepository invoiceDetailsRepository;
+
+    @Autowired
+    private CustomerAccountRepository customerAccountRepository;
+    private static final Logger LOG = Logger.getLogger(InvoiceManagerImpl.class.getName());
+    @Autowired
+    private CustomerManager customerManager;
+    @Autowired
+    private BillerManager billerManager;
+    @Autowired
+    private ProductManager productManager;
+    @Autowired
+    private CustomerServiceRepository customerServiceRepository;
+
+    @Transactional
+    public Invoice addNew(Invoice t) {
+        if (t.getInvoiceDetailses().isEmpty()) {
+            throw new IllegalArgumentException("Customer service or product cannot be empty");
+        }
+        Invoice invoice = this.invoiceRepository.findByInvoiceNumber(t.getInvoiceNumber());
+        if (invoice != null) {
+            throw new IllegalArgumentException("Invoice already exist.");
+        }
+
+        for (InvoiceDetails details : t.getInvoiceDetailses()) {
+            details.setAuditInfo(t.getAuditInfo());
+        }
+        String newInvoiceNo = StringUtls.randomNumber(6);
+        t.setInvoiceNumber(newInvoiceNo);
+        t.setFrequencyType(CustomerService.FrequencyType.General);
+
+        updateCustomerAccount(t);
+        return this.invoiceRepository.save(t);
+
+    }
+
+    //calculate customer balance forwards
+    private void updateCustomerAccount(Invoice invoice) {
+        LOG.info("inside customer account update");
+        CustomerAccount customerAccount = this.customerAccountRepository.findByCode(invoice.getCustomerCode());
+        double totalAmt = 0.0;
+        double taxAmtPerProduct = 0.0;
+        if (customerAccount != null) {
+            LOG.info("inside customer account not null");
+            for (InvoiceDetails details : invoice.getInvoiceDetailses()) {
+                totalAmt += details.getQuantity() * details.getUnitPrice();
+                //taxAmtPerProduct += calculateTax(details);
+            }
+            LOG.info("Total amount :" + totalAmt);
+            LOG.info("Balance Forward:" + customerAccount.getBalanceForwared());
+            LOG.info("Customer code:" + customerAccount.getCustomerCode());
+            customerAccount.setBalanceForwared(totalAmt + customerAccount.getBalanceForwared());
+            customerAccount.setAuditInfo(invoice.getAuditInfo());
+            customerAccount.setTotalTaxAmt(taxAmtPerProduct);
+
+            customerAccount.setCurrentAmount(totalAmt);
+            customerAccount.setTotalAmount(totalAmt + customerAccount.getBalanceForwared());
+            this.customerAccountRepository.save(customerAccount);
+            totalAmt = 0.0;
+
+        }
+
+    }
+
+    private double calculateTax(InvoiceDetails invoiceDetails) {
+        Product product = this.productManager.findByCode(invoiceDetails.getProductCode());
+        double totalTax = (invoiceDetails.getQuantity() * invoiceDetails.getUnitPrice()) * invoiceDetails.getDefaultTax();
+        return totalTax;
+
+    }
+
+    public void addAll(List<Invoice> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Transactional
+    public void update(Invoice t) {
+        this.updateCustomerAccount(t);
+        this.invoiceRepository.save(t);
+    }
+
+    public void remove(Invoice t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void removeBy(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Invoice find(String id) {
+        return this.invoiceRepository.findOne(id);
+    }
+
+    public List<Invoice> findAll() {
+        return this.invoiceRepository.findAll();
+    }
+
+    public List<Invoice> findWithPaging(int pageSize, int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Invoice findByInvoiceNumber(String invoiceNumber) {
+        return this.invoiceRepository.findByInvoiceNumber(invoiceNumber);
+    }
+
+    @Transactional
+    public void reoccuranceTrigger(CustomerService.FrequencyType frequencyType) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        Date date = new Date();
+        Long quarterly = Long.parseLong(sdf.format(date));
+
+        LOG.info("inside reocurrance trigger.");
+        List<Customer> listCustomer = this.customerManager.findAll();
+
+        Invoice invoice = new Invoice();
+
+        List<Biller> billers = this.billerManager.findAll();
+        for (Biller b : billers) {
+            invoice.setBillerCode(b.getCode());
+        }
+
+        if (!listCustomer.isEmpty()) {
+            LOG.info("inside customer not empty");
+            LOG.info("customer list size:" + listCustomer.size());
+
+            for (Customer customer : listCustomer) {
+                LOG.info("inside customer loop.");
+                //invoice 
+                String newInvoiceNo = StringUtls.randomNumber(6);
+                invoice.setCustomerCode(customer.getCode());
+                invoice.setInvoiceNumber(newInvoiceNo);
+                invoice.setDate(new Date());
+                invoice.getAuditInfo().setCreatedBy("System");
+                invoice.getAuditInfo().setCreatedOn(new Date());
+                //for invoice details
+
+                List<CustomerService> customerService = this.customerServiceRepository.findByCustomerId(customer.getId());
+                if (customerService != null) {
+                    for (CustomerService service : customerService) {
+                        if (service.getFrequencyType().equals(CustomerService.FrequencyType.Monthly)) {
+                            LOG.info("customer id:" + customer.getId());
+                            LOG.info("customer service size:" + customerService.size());
+                            service.setQuantity(1);
+                            invoice.addInvoiceDetails(addInvoiceDetails(service, invoice));
+                            invoice.setFrequencyType(frequencyType);
+                        }
+
+                        if (quarterly % 3 == 0) {
+                            LOG.info("inside quaterly");
+                            if (service.getFrequencyType().equals(CustomerService.FrequencyType.Quaterly)) {
+                                service.setQuantity(3);
+                                invoice.addInvoiceDetails(addInvoiceDetails(service, invoice));
+                                invoice.setFrequencyType(frequencyType);
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                //update customer account and tax calculation
+                updateCustomerAccount(invoice);
+                this.invoiceRepository.save(invoice);
+                invoice = new Invoice();
+                invoice.getInvoiceDetailses().clear();
+                LOG.info("Invoice Generated successfully.");
+
+            }
+        }
+
+    }
+
+    private InvoiceDetails addInvoiceDetails(CustomerService service, Invoice invoice) {
+        InvoiceDetails invoiceDetails = new InvoiceDetails();
+        Product product = this.productManager.findByCode(service.getProductCode());
+        if (product != null) {
+            // invoice details
+            invoiceDetails.setActive(true);
+            invoiceDetails.setDefaultTax(product.getDefaultTax());
+            invoiceDetails.setQuantity(service.getQuantity());
+            invoiceDetails.setUnitPrice(product.getUnitPrice());
+            invoiceDetails.setProductCode(product.getCode());
+            invoiceDetails.getAuditInfo().setCreatedBy("System");
+            invoiceDetails.getAuditInfo().setCreatedOn(new Date());
+            invoiceDetails.setInvoice(invoice);
+        }
+
+        return invoiceDetails;
+    }
+
+    public List<InvoiceDetails> findAllDetails(Long id) {
+        return this.invoiceDetailsRepository.findAllDetails(id);
+    }
+
+}

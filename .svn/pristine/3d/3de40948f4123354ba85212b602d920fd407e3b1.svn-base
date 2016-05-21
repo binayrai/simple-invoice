@@ -1,0 +1,103 @@
+package com.itexpertnepal.simpleinvoice.api.impl;
+
+import com.itexpertnepal.simpleinvoice.api.CustomerManager;
+import com.itexpertnepal.simpleinvoice.domain.Customer;
+import com.itexpertnepal.simpleinvoice.domain.CustomerAccount;
+import com.itexpertnepal.simpleinvoice.domain.CustomerService;
+import com.itexpertnepal.simpleinvoice.repository.CustomerAccountRepository;
+import com.itexpertnepal.simpleinvoice.repository.CustomerRepository;
+import com.itexpertnepal.simpleinvoice.repository.CustomerServiceRepository;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author binay
+ */
+@Service
+@Transactional(readOnly = true)
+class CustomerManagerImpl implements CustomerManager {
+
+    @Autowired
+    private CustomerRepository customerRepository;
+    @Autowired
+    private CustomerAccountRepository customerAccountRepository;
+    @Autowired
+    private CustomerServiceRepository customerServiceRepository;
+
+    @Transactional
+    public Customer addNew(Customer t) {
+        if (t.getCustomerServices().isEmpty()) {
+            throw new IllegalArgumentException("Customer service or product cannot be empty");
+        }
+        Customer customer = this.customerRepository.findByCode(t.getCode());
+        if (customer != null) {
+            throw new IllegalArgumentException("Customer code already exist.");
+        }
+        CustomerAccount tempCustAcc = this.customerAccountRepository.findByCode(t.getCode());
+        if (tempCustAcc != null) {
+            throw new IllegalArgumentException("Customer code already exist.");
+
+        }
+        CustomerAccount customerAccount = new CustomerAccount();
+        customerAccount.setBalanceForwared(t.getBalanceForward());
+        customerAccount.setAuditInfo(t.getAuditInfo());
+        customerAccount.setIsBalanceForward(true);
+        customerAccount.setCustomerCode(t.getCode());
+        this.customerAccountRepository.save(customerAccount);
+
+        return this.customerRepository.save(t);
+    }
+
+    public void addAll(List<Customer> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Transactional
+    public void update(Customer t) {
+        this.customerRepository.save(t);
+    }
+
+    public void remove(Customer t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void removeBy(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Customer find(String id) {
+        return this.customerRepository.findOne(id);
+    }
+
+    public List<Customer> findAll() {
+        return this.customerRepository.findAll();
+    }
+
+    public List<Customer> findWithPaging(int pageSize, int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Customer findByCode(String code) {
+        return this.customerRepository.findByCode(code);
+    }
+
+    public void enableordisableCustomerService(CustomerService customerService) {
+        this.customerServiceRepository.save(customerService);
+    }
+
+    public List<CustomerAccount> findByCustCode(String customerCode) {
+        return this.customerAccountRepository.findByCustomerCode(customerCode);
+    }
+
+    public CustomerAccount findByCustomerCode(String custCode) {
+        return this.customerAccountRepository.findByCode(custCode);
+    }
+
+    public List<Customer> findAllDesc() {
+        return this.customerRepository.findAllDesc();
+    }
+
+}

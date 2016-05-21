@@ -1,0 +1,156 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+    template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="#{msg['menu.userManagement.role']}"></h:outputText>
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onSave="save" onCancel="pretty:add_biller" savePermissionKey="COMPANY_ADD"/>
+
+    </ui:define>
+    <ui:define name="content">
+
+        <h:form prependId="false" id="object">            
+            <h:messages globalOnly="false" />
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="People &#187; Biller &#187; Add"/>                    
+                </f:facet>
+            </p:panel>
+    <p:panel xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:ui="http://java.sun.com/jsf/facelets"
+         xmlns:h="http://java.sun.com/jsf/html"
+         xmlns:f="http://java.sun.com/jsf/core"
+         xmlns:p="http://primefaces.org/ui"
+         xmlns:c="http://java.sun.com/jsp/jstl/core"
+         xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+         style="border: none;">
+
+
+    <p:fieldset id="personalField" legend="Personal Information ">
+        <h:panelGrid columns="4" id="personal" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+              <h:outputLabel for="code" value="Biller Code: * " />         
+              <h:inputText id="code" value="#{billerAddController.biller.code}" required="true" size="20"  /> 
+            <p:message for="code" />
+            <p:tooltip for="code" value="Enter Name " showEffect="fade" hideEffect="fade"/>
+           
+            <h:outputLabel for="name" value="Biller Name: * " />         
+            <h:inputText id="name" value="#{billerAddController.biller.name}" required="true" size="20"  /> 
+            <p:message for="name" />
+            <p:tooltip for="name" value="Enter Name " showEffect="fade" hideEffect="fade"/>
+
+             <h:outputLabel for="phone" value="Phone No: *" />         
+             <h:inputText id="phone" value="#{billerAddController.biller.phone}" required="true" size="20"  />  
+            <p:message for="phone" />
+            <p:tooltip for="phone" value="Enter phone " showEffect="fade" hideEffect="fade"/>
+            
+        <!--     <h:outputLabel for="mobile_phone" value="Mobile Phone No: *" />         
+             <h:inputText id="mobile_phone" value="#{billerAddController.biller.mobile}" required="false" size="20"  />  
+            <p:message for="mobile_phone" />
+            <p:tooltip for="mobile_phone" value="Enter mobile phone " showEffect="fade" hideEffect="fade"/>
+
+             <h:outputLabel for="fax" value="Fax No: *" />         
+             <h:inputText id="fax" value="#{billerAddController.biller.fax}" required="false" size="20"  />  
+            <p:message for="fax" />
+            <p:tooltip for="fax" value="Enter phone " showEffect="fade" hideEffect="fade"/> -->
+
+            <h:outputLabel for="email" value="Email:" />         
+            <h:inputText id="email" value="#{billerAddController.biller.email}" size="20"  /> 
+            <p:message for="email" />
+            <p:tooltip for="email" value="Enter email " showEffect="fade" hideEffect="fade"/>
+        </h:panelGrid>
+   
+    </p:fieldset>
+
+       <p:fieldset id="address_set" legend="Address">
+        <h:panelGrid columns="4" id="address_info" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+            <h:outputLabel for="street_add" value="Street Address: *" /> 
+            <h:inputText id="street_add" value="#{billerAddController.biller.streetAddress}"  size="20"  /> 
+            <p:message for="street_add" />
+            <p:tooltip for="street_add" value="Enter occupation " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="street_add2" value="Street Address2: *" /> 
+            <h:inputText id="street_add2" value="#{billerAddController.biller.streetAddress2}"  size="20"  /> 
+            <p:message for="street_add2" />
+            <p:tooltip for="street_add2" value="Enter occupation " showEffect="fade" hideEffect="fade"/>
+            
+            <h:outputLabel for="city" value="City: *" />         
+            <h:inputText id="city" value="#{billerAddController.biller.city}" required="true" size="20"  /> 
+            <p:message for="city" />
+            <p:tooltip for="city" value="Enter city " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="country" value="Country: " />         
+            <h:inputText id="country" value="#{billerAddController.biller.country}"  size="20"  /> 
+            <p:message for="country" />
+            <p:tooltip for="country" value="Enter Country " showEffect="fade" hideEffect="fade"/>
+
+        </h:panelGrid>
+    </p:fieldset>
+        
+          <p:fieldset id="pay_pal" legend="Pay Pal Details">
+        <h:panelGrid columns="4" id="credit_card_info" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+            <h:outputLabel for="business_name" value="Pay Pal Business Name: *" /> 
+            <h:inputText id="business_name" value="#{billerAddController.biller.paypalName}"  size="20"  /> 
+            <p:message for="business_name" />
+            <p:tooltip for="business_name" value="Enter Pay Pal Business Name " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="notify_url" value="Pay Pal Notify Url *" /> 
+            <h:inputText id="notify_url" value="#{billerAddController.biller.paypalNotifyUrl}"  size="20"  /> 
+            <p:message for="notify_url" />
+            <p:tooltip for="notify_url" value="Enter Pay Pal Notify Url " showEffect="fade" hideEffect="fade"/>
+            
+             <h:outputLabel for="return_url" value="Pay Pal Return Url: *" />
+             <h:inputText id="return_url" value="#{billerAddController.biller.paypalReturnUrl}"  size="20"  /> 
+            <p:message for="return_url" />
+            <p:tooltip for="return_url" value="Select Date of join " showEffect="fade" hideEffect="fade"/>
+           
+            
+
+        </h:panelGrid>
+    </p:fieldset>
+            
+         <p:fieldset>
+              <h:outputLabel for="eway_id" value="Eway Customer ID *" /> 
+              <h:inputText id="eway_id" value="#{billerAddController.biller.ewawId}"  size="20"  /> 
+            <p:message for="eway_id" />
+            <p:tooltip for="eway_id" value="Enter Eway Customer ID " showEffect="fade" hideEffect="fade"/>
+            
+              <h:outputLabel for="custom_field" value="Custom Field: *" />
+              <h:inputText id="custom_field" value="#{billerAddController.biller.customField}"  size="20"  /> 
+            <p:message for="custom_field" />
+            <p:tooltip for="custom_field" value=" " showEffect="fade" hideEffect="fade"/>
+              
+            <h:outputLabel for="invoice_footer" value="Invoice Footer: *" />
+            <h:inputText id="invoice_footer" value="#{billerAddController.biller.invoiceFooter}"  size="20"  /> 
+            <p:message for="invoice_footer" />
+            <p:tooltip for="invoice_footer" value="Select Date of join " showEffect="fade" hideEffect="fade"/>
+            
+                  <h:outputLabel for="note" value="Note: " />
+                  <h:inputTextarea cols="40" rows="3" value="#{billerAddController.biller.note}"  />
+          
+             
+               
+  </p:fieldset>
+        <h:commandButton id="save" action="#{billerAddController.onSave()}" value="Save" style="display: none"  />
+
+</p:panel>
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value=" "/>
+                </f:facet>
+            </p:panel>
+
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>

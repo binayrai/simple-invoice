@@ -1,0 +1,23 @@
+package com.itexpertnepal.simpleinvoice.repository;
+
+import com.itexpertnepal.simpleinvoice.domain.Invoice;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author binay
+ */
+@Transactional(readOnly = true)
+public interface InvoiceRepository extends JpaRepository<Invoice, String> {
+
+    public Invoice findByInvoiceNumber(String code);
+
+    @Query("select i,c,b from Invoice i, Customer c,Biller b where i.customerCode = c.code and i.billerCode = b.code")
+    public List<Object[]> findAllInvoice();
+
+   
+
+}

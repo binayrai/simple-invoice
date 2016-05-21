@@ -1,0 +1,105 @@
+package com.itexpertnepal.simpleinvoice.api.impl;
+
+import com.itexpertnepal.simpleinvoice.api.InvoiceManager;
+import com.itexpertnepal.simpleinvoice.domain.CustomerAccount;
+import com.itexpertnepal.simpleinvoice.domain.Invoice;
+import com.itexpertnepal.simpleinvoice.domain.InvoiceDetails;
+import com.itexpertnepal.simpleinvoice.repository.CustomerAccountRepository;
+import com.itexpertnepal.simpleinvoice.repository.InvoiceRepository;
+import com.itexpertnepal.simpleinvoice.utilities.StringUtls;
+import java.util.List;
+import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author binay
+ */
+@Service
+@Transactional(readOnly = true)
+class InvoiceManagerImpl implements InvoiceManager {
+    
+    @Autowired
+    private InvoiceRepository invoiceRepository;
+    
+    @Autowired
+    private CustomerAccountRepository customerAccountRepository;
+    private static final Logger LOG = Logger.getLogger(InvoiceManagerImpl.class.getName());
+    
+    @Transactional
+    public Invoice addNew(Invoice t) {
+        if (t.getInvoiceDetailses().isEmpty()) {
+            throw new IllegalArgumentException("Customer service or product cannot be empty");
+        }
+        Invoice invoice = this.invoiceRepository.findByInvoiceNumber(t.getInvoiceNumber());
+        if (invoice != null) {
+            throw new IllegalArgumentException("Invoice already exist.");
+        }
+        
+        for (InvoiceDetails details : t.getInvoiceDetailses()) {
+            details.setAuditInfo(t.getAuditInfo());
+        }
+        String newInvoiceNo = StringUtls.randomNumber(6);
+        t.setInvoiceNumber(newInvoiceNo);
+        
+        updateCustomerAccount(t);
+        return this.invoiceRepository.save(t);
+        
+    }
+
+    //calculate customer balance forwards
+    private void updateCustomerAccount(Invoice invoice) {
+        
+        CustomerAccount customerAccount = this.customerAccountRepository.findByCode(invoice.getCustomerCode());
+        double totalAmt = 0.0;
+        if (customerAccount != null) {
+            for (InvoiceDetails details : invoice.getInvoiceDetailses()) {
+                totalAmt += details.getQuantity() * details.getUnitPrice();
+            }
+            
+            customerAccount.setBalanceForwared(totalAmt + customerAccount.getBalanceForwared());
+            customerAccount.setAuditInfo(invoice.getAuditInfo());
+            this.customerAccountRepository.save(customerAccount);
+            totalAmt = 0.0;
+            
+        }
+        
+    }
+    
+    public void addAll(List<Invoice> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Transactional
+    public void update(Invoice t) {
+        this.updateCustomerAccount(t);
+        this.invoiceRepository.save(t);
+    }
+    
+    public void remove(Invoice t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void removeBy(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public Invoice find(String id) {
+        return this.invoiceRepository.findOne(id);
+    }
+    
+    public List<Invoice> findAll() {
+        return this.invoiceRepository.findAll();
+    }
+    
+    public List<Invoice> findWithPaging(int pageSize, int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public Invoice findByInvoiceNumber(String invoiceNumber) {
+        return this.invoiceRepository.findByInvoiceNumber(invoiceNumber);
+    }
+    
+}

@@ -1,0 +1,66 @@
+package com.itexpertnepal.simpleinvoice.domain;
+
+import com.itexpertnepal.simpleinvoice.domain.common.AbstractEntity;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+
+/**
+ *
+ * @author binay
+ */
+@Entity
+@Table(name = "invoices")
+public class Invoice extends AbstractEntity implements Serializable {
+
+    private String customerCode;
+    private String billerCode;
+
+    private Date date;
+    private Set<InvoiceDetails> invoiceDetailses;
+
+    @Column(name = "customer_code")
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
+    }
+
+    @Column(name = "biller_code")
+    public String getBillerCode() {
+        return billerCode;
+    }
+
+    public void setBillerCode(String billerCode) {
+        this.billerCode = billerCode;
+    }
+
+    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name = "date")
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "invoice")
+    public Set<InvoiceDetails> getInvoiceDetailses() {
+        return invoiceDetailses;
+    }
+
+    public void setInvoiceDetailses(Set<InvoiceDetails> invoiceDetailses) {
+        this.invoiceDetailses = invoiceDetailses;
+    }
+
+}

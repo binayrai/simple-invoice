@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet library="css" name="screen.css" />
+        <h:outputStylesheet library="css" name="default.css" />
+        <link type="text/css" rel="stylesheet"
+              href="#{request.contextPath}/resources/css/start/skin.css" />
+        <link type="text/css" rel="stylesheet"
+              href="#{request.contextPath}/resources/css/default.css" />
+
+
+        <title>EHLEE: EMERSONHLEE BILLING AND INVOICING SYSTEM</title>
+    </h:head>
+    <body>
+
+        <div id="loginpage">
+            <p style="background: none repeat scroll 0 0 #999999;
+               border-radius: 7px 7px 0 0;
+               box-shadow: 0 0 15px #333333 inset;
+               color: #3B5998;
+               font-size: 15px;
+               font-weight: bold;
+               height: 37px;
+               padding-left: 40px;
+               padding-top: 13px;">EMERSONHLEE BILLING AND INVOICING SYSTEM</p>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+
+                <h:form prependId="false">
+                    <br/>
+
+
+                    <h:panelGrid columns="3">
+
+                        <h:outputLabel />
+                        <h:outputText value="#{loginBean.msg}" style="height: 40px;
+                                      width: 100px; font-size: 16px;color: red"/>
+                        <h:outputLabel />
+
+                        <h:outputLabel value="User ID" for="j_username"  style="font-size: 20px;  font-family: times new roman;  font-weight: bold;margin-left:20px; margin-right:10px; margin-top:20px;" />                               
+                        <h:inputText  id="j_username" value="#{loginBean.username}"  requiredMessage="* Required" required="true"/>
+                        <p:message for="j_username"/>
+
+                        <h:outputLabel value="Password" for="j_password" style="font-size: 20px;  font-family: times new roman;  font-weight: bold;margin-left:20px; margin-right:10px;margin-top:20px;"/>                             
+                        <h:inputSecret id="j_password" value="#{loginBean.password}" requiredMessage="* Required" required="true"/>
+                        <p:message for="j_password"/>
+                    </h:panelGrid>
+
+                    <br/>
+                    <p:commandButton value="Login" title="Click to login" action="#{loginBean.process}" style="height: 40px;
+                                     margin-left: 250px; width: 100px; font-size: 16px;" ajax="false"  />
+
+                </h:form>
+
+
+
+            </table></div>
+
+
+    </body>
+</html>

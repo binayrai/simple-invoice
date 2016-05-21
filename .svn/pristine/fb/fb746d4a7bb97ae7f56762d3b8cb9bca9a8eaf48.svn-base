@@ -1,0 +1,94 @@
+package com.itexpertnepal.simpleinvoice.ui.controller.reocurrence;
+
+import com.itexpertnepal.simpleinvoice.domain.CustomerService.FrequencyType;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringRequestScoped;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+@SpringRequestScoped
+public class ListReocurrenceController {
+
+    private Date indexDate;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+    private String filePath = "";
+    private FrequencyType frequencyType;
+    String userHome = System.getProperty("user.home");
+    private Date futureDate;
+
+    private static final int DEFAULT_BUFFER_SIZE = 10240; // 10KB.
+
+    public Date getIndexDate() {
+        return indexDate;
+    }
+
+    public void setIndexDate(Date indexDate) {
+        this.indexDate = indexDate;
+    }
+
+    public FrequencyType getFrequencyType() {
+        return frequencyType;
+    }
+
+    public void setFrequencyType(FrequencyType frequencyType) {
+        this.frequencyType = frequencyType;
+    }
+
+    public Date getFutureDate() {
+        return futureDate = new Date();
+    }
+
+    public void setFutureDate(Date futureDate) {
+        this.futureDate = futureDate;
+    }
+
+    public void downloadPdf() throws IOException {
+        ///home/binay/Monthly_Invoice_2012-12.pdf
+        filePath = "" + userHome + "/invoice/" + frequencyType.toString() + "_Invoice_" + format.format(indexDate) + ".pdf";
+
+        if (frequencyType.equals(FrequencyType.Monthly)) {
+            filePath = "" + userHome + "/invoice/" + frequencyType.toString() + "_Invoice_" + format.format(indexDate) + ".pdf";
+        }
+        downloadPDF(filePath);
+
+    }
+
+    public void downloadPDF(String filePath) throws IOException {
+
+        FileInputStream baos = new FileInputStream(filePath);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+
+        response.setHeader("Expires", "0");
+        response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+        response.setHeader("Pragma", "public");
+        response.setContentType("application/pdf");
+        response.addHeader("Content-Disposition", "attachment; filename=invoice_" + frequencyType.toString() + "_Invoice_" + format.format(indexDate) + ".pdf");
+
+        OutputStream os = response.getOutputStream();
+
+        byte buffer[] = new byte[DEFAULT_BUFFER_SIZE];
+        int bytesRead;
+
+        while ((bytesRead = baos.read(buffer)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+
+        os.flush();
+        // os.close();
+
+    }
+
+}

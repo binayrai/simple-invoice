@@ -1,0 +1,17 @@
+package com.itexpertnepal.simpleinvoice.api;
+
+import com.itexpertnepal.simpleinvoice.api.common.CrudService;
+import com.itexpertnepal.simpleinvoice.domain.Product;
+import java.util.Map;
+
+/**
+ *
+ * @author binay
+ */
+public interface ProductManager extends CrudService<Product, String> {
+
+    public Product findByCode(String code);
+
+    public Map findAllProductNameStartWith(String expression);
+
+}

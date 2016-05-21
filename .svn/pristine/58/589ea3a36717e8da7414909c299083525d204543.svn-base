@@ -1,0 +1,105 @@
+package com.itexpertnepal.simpleinvoice.startup;
+
+import com.itexpertnepal.simpleinvoice.api.common.RoleManager;
+import com.itexpertnepal.simpleinvoice.api.common.UserManager;
+import com.itexpertnepal.simpleinvoice.domain.common.Permission;
+import com.itexpertnepal.simpleinvoice.domain.common.Role;
+import com.itexpertnepal.simpleinvoice.domain.common.User;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+public class Startup {
+
+    @Autowired
+    private UserManager userManager;
+    @Autowired
+    private RoleManager roleManager;
+    private static final Logger LOG = Logger.getLogger(Startup.class.getName());
+
+    @PostConstruct
+    private void init() {
+        this.addDefaultRole();
+        this.addAdminRole();
+        this.addCompanyAdminRole();
+        this.addAdminUser();
+
+    }
+
+    public void addDefaultRole() {
+        Role role = null;
+        role = this.roleManager.findByRoleName(Role.DEFAULT_ROLE_NAME);
+        if (role != null) {
+            return;
+        }
+        role = new Role(Role.DEFAULT_ROLE_NAME, Role.RoleType.DEFAULT);
+        role.addPermission(Permission.PROFILE_UPDATE);
+        this.roleManager.addNew(role);
+
+    }
+
+    private void addAdminRole() {
+        Role role = null;
+        role = this.roleManager.findByRoleName(Role.ADMIN_ROLE_NAME);
+        if (role != null) {
+            return;
+        }
+        role = new Role(Role.ADMIN_ROLE_NAME, Role.RoleType.ADMIN);
+        role.addPermission(Permission.PROFILE_UPDATE);
+        role.addPermission(Permission.COMPANY_ADD);
+        role.addPermission(Permission.COMPANY_DELETE);
+        role.addPermission(Permission.COMPANY_EDIT);
+        role.addPermission(Permission.COMPANY_VERIFY);
+        role.addPermission(Permission.COMPANY_VIEW);
+        role.addPermission(Permission.PROFILE_UPDATE);
+        this.roleManager.addNew(role);
+
+    }
+
+    private void addCompanyAdminRole() {
+        Role role = null;
+        role = this.roleManager.findByRoleName(Role.COMPANY_ADMIN_ROLE_NAME);
+        if (role != null) {
+            return;
+        }
+        role = new Role(Role.COMPANY_ADMIN_ROLE_NAME, Role.RoleType.COMPANY_ADMIN);
+        role.addPermission(Permission.ROLE_ADD);
+        role.addPermission(Permission.ROLE_DELETE);
+        role.addPermission(Permission.ROLE_EDIT);
+        role.addPermission(Permission.ROLE_VERIFY);
+        role.addPermission(Permission.ROLE_VIEW);
+
+        role.addPermission(Permission.USER_ADD);
+        role.addPermission(Permission.USER_DELETE);
+        role.addPermission(Permission.USER_EDIT);
+        role.addPermission(Permission.USER_VERIFY);
+        role.addPermission(Permission.USER_VIEW);
+
+        role.addPermission(Permission.PROFILE_UPDATE);
+        this.roleManager.addNew(role);
+
+    }
+
+    private void addAdminUser() {
+        User u = null;
+        final String USER_NAME = "admin@itexpert.com.np";
+        final String PASSWORD = "admin@123";
+
+        Role r = this.roleManager.findByRoleName(Role.ADMIN_ROLE_NAME);
+        if (r != null) {
+            LOG.info("Role Name:" + r.getRoleName());
+        }
+        u = new User(USER_NAME, PASSWORD, r);
+        u.setRoleType(Role.RoleType.ADMIN);
+        if (this.userManager.findByUserName(USER_NAME) == null) {
+            this.userManager.addNew(u);
+        }
+    }
+
+}

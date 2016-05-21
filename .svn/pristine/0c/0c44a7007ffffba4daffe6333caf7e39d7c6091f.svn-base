@@ -1,0 +1,91 @@
+package com.itexpertnepal.simpleinvoice.ui.controller.customer;
+
+import com.itexpertnepal.simpleinvoice.api.CustomerManager;
+import com.itexpertnepal.simpleinvoice.domain.Customer;
+import com.itexpertnepal.simpleinvoice.domain.CustomerService;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringViewScoped;
+import com.itexpertnepal.simpleinvoice.ui.aspect.CatchException;
+import com.itexpertnepal.simpleinvoice.ui.security.SpringSecurityUtility;
+import com.itexpertnepal.simpleinvoice.utl.logger.Log;
+import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import org.omnifaces.util.Messages;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+@SpringViewScoped
+public class CustomerEditController {
+
+    private String selectedCustomerCode;
+    private Customer customer;
+    private CustomerService customerService;
+    private List<CustomerService> listCustomerServices;
+    @Autowired
+    private CustomerManager customerManager;
+    @Log
+    private Logger logger;
+    @Autowired
+    private SpringSecurityUtility securityUtility;
+
+    @PostConstruct
+    public void init() {
+        this.customer = new Customer();
+        this.customerService = new CustomerService();
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public CustomerService getCustomerService() {
+        return customerService;
+    }
+
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
+    public List<CustomerService> getListCustomerServices() {
+        return listCustomerServices;
+    }
+
+    public void setListCustomerServices(List<CustomerService> listCustomerServices) {
+        this.listCustomerServices = listCustomerServices;
+    }
+
+    public String getSelectedCustomerCode() {
+        return selectedCustomerCode;
+    }
+
+    public void setSelectedCustomerCode(String selectedCustomerCode) {
+        this.selectedCustomerCode = selectedCustomerCode;
+    }
+
+    public void loadCustomer() {
+        if (this.selectedCustomerCode != null) {
+            this.customer = this.customerManager.findByCode(selectedCustomerCode);
+        }
+    }
+
+    @CatchException
+    public String onUpdate() {
+        logger.debug("inside update");
+        this.customer.getAuditInfo().setModifiedBy(this.securityUtility.getPrinciple().getUsername());
+        this.customer.getAuditInfo().setModifiedOn(new Date());
+        this.customerManager.addNew(customer);
+        Messages.addInfo(null, "Customer updated successfully.");
+        return "pretty:customers";
+    }
+
+}

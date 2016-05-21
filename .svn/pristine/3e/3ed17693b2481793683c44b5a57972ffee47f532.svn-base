@@ -1,0 +1,89 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+    template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="#{msg['menu.userManagement.role']}"></h:outputText>
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onSave="save" onCancel="pretty:products" updatePermissionKey="COMPANY_EDIT" deletePermissionKey="COMPANY_DELETE" onDelete="delete"/>
+
+    </ui:define>
+    <ui:define name="content">
+
+        <h:form prependId="false" id="object">            
+            <h:messages globalOnly="false" />
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="Setting &#187; Payment Types &#187; Add"/>                    
+                </f:facet>
+            </p:panel>
+            <h:panelGrid columns="2" id="payment_list" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+                <h:outputLabel for="Code" value="Code *" />
+                <h:inputText id="Code" required="true" size="15" value="#{productEditController.product.code}" />
+                <p:message for="Code" />
+                <p:tooltip for="Code" value="Is alfa-numeric and Must not contain any special characters except [-] and [ _ ]" showEffect="fade" hideEffect="fade"/>
+
+                <h:outputLabel for="Description" value="Description: *" />
+                <h:inputText id="Description" required="true" size="15" value="#{productEditController.product.name}" />
+                <p:message for="Description" />
+                <p:tooltip for="Description" value="Is alfa-numeric and Must not contain any special characters except [-] and [ _ ]" showEffect="fade" hideEffect="fade"/>
+
+                <h:outputLabel for="Unit_price" value="Unit Price: *" />
+                <h:inputText id="Unit_price" required="true" size="15" value="#{productEditController.product.unitPrice}" />
+                <p:message for="Unit_price" />
+                <p:tooltip for="Unit_price" value="Is alfa-numeric and Must not contain any special characters except [-] and [ _ ]" showEffect="fade" hideEffect="fade"/>
+
+
+
+                <h:outputLabel for="Default_tax" value="Default Tax: *" />
+                <h:selectOneMenu id="Default_tax" value="#{productEditController.product.defaultTax}" required="true"  >
+                    <f:selectItem itemLabel="Please Select ....." noSelectionOption="true" />  
+                    <f:selectItems value="#{taxRateListController.taxRates}" var="tax" itemLabel="#{tax.description}" itemValue="#{tax.id}"/>
+
+                </h:selectOneMenu>
+                <p:message for="Default_tax" />
+                <p:tooltip for="Default_tax" value="Enter Default Tax" showEffect="fade" hideEffect="fade"/>
+
+                <h:outputLabel for="invoice_type" value="Invoice Type: *" />
+                <h:selectOneMenu id="invoice_type" value="#{productEditController.product.invoiceType}" required="true"  >
+                    <f:selectItem itemLabel="Please Select ....." noSelectionOption="true" />  
+                    <f:selectItems value="#{helperUtility.invoiceType}"/>
+                </h:selectOneMenu>
+                <p:message for="invoice_type" />
+                <p:tooltip for="invoice_type" value="Enter Default Tax" showEffect="fade" hideEffect="fade"/>
+
+
+
+                <h:outputLabel for="Custom_fields" value="Custom Fields: *" />
+                <h:inputText id="Custom_fields" required="true" size="15" value="#{productEditController.product.customField}" />
+                <p:message for="Custom_fields" />
+                <p:tooltip for="Custom_fields" value="Is alfa-numeric and Must not contain any special characters except [-] and [ _ ]" showEffect="fade" hideEffect="fade"/>
+
+                <h:outputLabel for="Notes" value="Notes: *" />
+                <h:inputText id="Notes" required="true" size="15" value="#{productEditController.product.notes}" />
+                <p:message for="Notes" />
+                <p:tooltip for="Notes" value="Is alfa-numeric and Must not contain any special characters except [-] and [ _ ]" showEffect="fade" hideEffect="fade"/>
+
+
+
+            </h:panelGrid>
+            <h:commandButton id="save" action="#{productEditController.onUpdate}" value="Save" style="display: none"  />
+
+
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value=" "/>
+                </f:facet>
+            </p:panel>
+
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>

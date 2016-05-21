@@ -1,0 +1,14 @@
+package com.itexpertnepal.simpleinvoice.repository;
+
+import com.itexpertnepal.simpleinvoice.domain.Product;
+import java.io.Serializable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+/**
+ *
+ * @author binay
+ */
+public interface ProductRepository extends JpaRepository<Product, String> {
+
+    public Product findByCode(String code);
+}

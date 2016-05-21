@@ -1,0 +1,14 @@
+package com.itexpertnepal.simpleinvoice.repository;
+
+import com.itexpertnepal.simpleinvoice.domain.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+/**
+ *
+ * @author binay
+ */
+public interface CustomerRepository extends JpaRepository<Customer, String> {
+
+    public Customer findByCode(String code);
+
+}

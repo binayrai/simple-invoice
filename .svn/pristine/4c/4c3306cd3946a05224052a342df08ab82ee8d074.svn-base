@@ -1,0 +1,46 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+    template="/WEB-INF/templates/template.xhtml">
+    <ui:define name="title">
+        <h:outputText value=""></h:outputText>
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onSave="save" onCancel="pretty:customers" savePermissionKey="CUSTOMER_ADD"/>
+
+    </ui:define>
+    <ui:define name="content">
+        <p:panel style="border: none;">
+            <f:facet name="header">
+                <h:outputText value="Customer Management &#187; Customer &#187; Add"/>                  
+            </f:facet>
+        </p:panel>
+        <h:form prependId="false" id="object">
+            <h:messages globalOnly="false" />
+            <p:tabView id="tab">  
+                <p:tab title="Basic Info">
+                    <ui:include src="add.xhtml"/>
+                </p:tab>
+                <p:tab title="Add Service">
+                    <h:commandButton type="button" value="Add" onclick="dlg.show()"/>
+                    <ui:include src="list_service.xhtml" />
+                </p:tab>
+
+                <p:tab title="Balance Forward">                   
+                    <ui:include src="balance_forward.xhtml" />
+                </p:tab>
+
+
+
+            </p:tabView>
+            <h:commandButton id="save" value="save" action="#{customerAddController.onSave}" style="display: none"/>
+            <h:commandButton id="delete" value="Delete"  action="#{agentBean.onDelete()}" style="display:none;" onclick="return confirm('Are You Sure,you want to Enable/Disable?')" />
+        </h:form> 
+        <ui:include src="add_service.xhtml" />
+    </ui:define>
+</ui:composition>
+

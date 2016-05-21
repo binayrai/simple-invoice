@@ -1,0 +1,280 @@
+package com.itexpertnepal.simpleinvoice.domain;
+
+import com.itexpertnepal.simpleinvoice.domain.common.AbstractEntity;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+
+/**
+ *
+ * @author binay
+ */
+@Entity
+@Table(name = "customers")
+public class Customer extends AbstractEntity implements Serializable {
+
+    private String code;
+    private String name;
+    private String accountNumber;
+    private int contact;
+    private String streetAddress;
+    private String streetAddressTwo;
+    private String city;
+    private String state;
+    private String zipCode;
+    private String country;
+    private int phoneNo;
+    private int mobileNo;
+    private int fax;
+    private String emial;
+    private String creditCardHolderName;
+    private String creditCardNo;
+    private Date creditCardExpiryDate;
+    private String customFieldOne;
+    private String customFieldTwo;
+    private String note;
+    private Set<CustomerService> customerServices;
+
+    public Customer() {
+        this.customerServices = new HashSet<CustomerService>();
+    }
+
+    public Customer(String code, String name, String accountNumber, int contact, String streetAddress) {
+        this();
+        this.code = code;
+        this.name = name;
+        this.accountNumber = accountNumber;
+        this.contact = contact;
+        this.streetAddress = streetAddress;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public int getContact() {
+        return contact;
+    }
+
+    public void setContact(int contact) {
+        this.contact = contact;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    public String getStreetAddressTwo() {
+        return streetAddressTwo;
+    }
+
+    public void setStreetAddressTwo(String streetAddressTwo) {
+        this.streetAddressTwo = streetAddressTwo;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public int getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(int phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public int getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(int mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public int getFax() {
+        return fax;
+    }
+
+    public void setFax(int fax) {
+        this.fax = fax;
+    }
+
+    public String getEmial() {
+        return emial;
+    }
+
+    public void setEmial(String emial) {
+        this.emial = emial;
+    }
+
+    public String getCreditCardHolderName() {
+        return creditCardHolderName;
+    }
+
+    public void setCreditCardHolderName(String creditCardHolderName) {
+        this.creditCardHolderName = creditCardHolderName;
+    }
+
+    public String getCreditCardNo() {
+        return creditCardNo;
+    }
+
+    public void setCreditCardNo(String creditCardNo) {
+        this.creditCardNo = creditCardNo;
+    }
+
+    @Temporal(javax.persistence.TemporalType.DATE)
+    public Date getCreditCardExpiryDate() {
+        return creditCardExpiryDate;
+    }
+
+    public void setCreditCardExpiryDate(Date creditCardExpiryDate) {
+        this.creditCardExpiryDate = creditCardExpiryDate;
+    }
+
+    public String getCustomFieldOne() {
+        return customFieldOne;
+    }
+
+    public void setCustomFieldOne(String customFieldOne) {
+        this.customFieldOne = customFieldOne;
+    }
+
+    public String getCustomFieldTwo() {
+        return customFieldTwo;
+    }
+
+    public void setCustomFieldTwo(String customFieldTwo) {
+        this.customFieldTwo = customFieldTwo;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+    public Set<CustomerService> getCustomerServices() {
+        return customerServices;
+    }
+
+    public void setCustomerServices(Set<CustomerService> customerServices) {
+        this.customerServices = customerServices;
+    }
+
+    public void addCustomerService(CustomerService customerService) {
+        if (this.customerServices == null) {
+            this.customerServices = new HashSet<CustomerService>();
+        }
+        if (this.customerServices.contains(customerService)) {
+            return;
+        }
+        customerService.setCustomer(this);
+        this.customerServices.add(customerService);
+
+    }
+
+    public void addCustomerService(Collection<CustomerService> customerService) {
+        this.customerServices.addAll(customerService);
+
+    }
+
+    public void removeCustomerService(CustomerService customerService) {
+        if (this.customerServices.contains(customerService)) {
+            this.customerServices.remove(customerService);
+        }
+
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + (this.code != null ? this.code.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Customer other = (Customer) obj;
+        if ((this.code == null) ? (other.code != null) : !this.code.equals(other.code)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return code;
+    }
+
+}

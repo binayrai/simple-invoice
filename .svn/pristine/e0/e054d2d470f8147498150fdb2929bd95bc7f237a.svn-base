@@ -1,0 +1,32 @@
+package com.itexpertnepal.simpleinvoice.ui.controller.invoice;
+
+import com.itexpertnepal.simpleinvoice.api.InvoiceManager;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringRequestScoped;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+@SpringRequestScoped
+public class InvoiceListController {
+
+    private List<Object[]> listInvoices;
+    @Autowired
+    private InvoiceManager invoiceManager;
+
+    public List<Object[]> getListInvoices() {
+        if (this.listInvoices == null) {
+            this.listInvoices = invoiceManager.findAllInvoices();
+        }
+        return listInvoices;
+    }
+
+    public void setListInvoices(List<Object[]> listInvoices) {
+        this.listInvoices = listInvoices;
+    }
+
+}

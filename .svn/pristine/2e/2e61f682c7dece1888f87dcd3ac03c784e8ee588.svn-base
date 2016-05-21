@@ -1,0 +1,12 @@
+package com.itexpertnepal.simpleinvoice.repository;
+
+import com.itexpertnepal.simpleinvoice.domain.CustomerService;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+/**
+ *
+ * @author binay
+ */
+public interface CustomerServiceRepository extends JpaRepository<CustomerService, Long> {
+
+}

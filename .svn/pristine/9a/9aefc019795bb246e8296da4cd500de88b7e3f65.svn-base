@@ -1,0 +1,18 @@
+package com.itexpertnepal.simpleinvoice.ui.job.schedular;
+
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+
+/**
+ *
+ * @author binay
+ */
+public class ReoccuranceJob implements Job {
+
+    @Override
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
+        System.out.println("Reoccurance Generated for this month.");
+    }
+
+}

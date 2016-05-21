@@ -1,0 +1,81 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.itexpertnepal.simpleinvoice.api.impl;
+
+import com.itexpertnepal.simpleinvoice.api.BillerManager;
+import com.itexpertnepal.simpleinvoice.domain.Biller;
+import com.itexpertnepal.simpleinvoice.repository.BillerRepository;
+import com.itexpertnepal.simpleinvoice.utl.logger.Log;
+import java.util.List;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author itexpertdell
+ */
+@Service
+@Transactional(readOnly = true)
+class BillerManagerImpl implements BillerManager{
+    
+    @Autowired
+    private BillerRepository billerRepository;
+    
+     @Log
+    private Logger logger;
+
+
+    public Biller findByCode(String code) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+
+  //  @Transactional
+ ////   public Biller addNew(Biller t) {
+//Biller biller = this.findByCode(t.getCode());
+ //   if(biller!=null){
+   //     throw new IllegalArgumentException("Biller Code Already Exist");
+   // }
+   // return this.billerRepository.save(t);}
+
+    
+    public void addAll(List<Biller> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+ 
+    @Transactional
+    public void update(Biller t) {
+this.billerRepository.save(t);    }
+
+    public void remove(Biller t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void removeBy(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Biller find(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Transactional 
+   public List<Biller> findAll() {
+return this.billerRepository.findAll();    }
+
+    public List<Biller> findWithPaging(int pageSize, int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Transactional
+    public Biller addNew(Biller t) {
+return this.billerRepository.save(t);    }
+    
+}

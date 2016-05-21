@@ -1,0 +1,139 @@
+package com.itexpertnepal.simpleinvoice.ui.controller.customer;
+
+import com.itexpertnepal.simpleinvoice.api.CustomerManager;
+import com.itexpertnepal.simpleinvoice.api.ProductManager;
+import com.itexpertnepal.simpleinvoice.domain.Customer;
+import com.itexpertnepal.simpleinvoice.domain.CustomerService;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringViewScoped;
+import com.itexpertnepal.simpleinvoice.ui.aspect.CatchException;
+import com.itexpertnepal.simpleinvoice.ui.security.SpringSecurityUtility;
+import com.itexpertnepal.simpleinvoice.utl.logger.Log;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
+import org.omnifaces.util.Messages;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+@SpringViewScoped
+public class CustomerAddController {
+
+    private Customer customer;
+    private CustomerService customerService;
+    private List<CustomerService> listCustomerServices;
+    @Autowired
+    private CustomerManager customerManager;
+    @Autowired
+    private ProductManager productManager;
+    @Log
+    private Logger logger;
+    @Autowired
+    private SpringSecurityUtility securityUtility;
+    private String selectedProduct;
+    Map<String, String> map = null;
+
+    @PostConstruct
+    public void init() {
+        this.customer = new Customer();
+        this.customerService = new CustomerService();
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public CustomerService getCustomerService() {
+        return customerService;
+    }
+
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
+    public List<CustomerService> getListCustomerServices() {
+        if (this.customer != null) {
+            this.listCustomerServices = new ArrayList<CustomerService>(this.customer.getCustomerServices());
+        }
+        return listCustomerServices;
+    }
+
+    public void setListCustomerServices(List<CustomerService> listCustomerServices) {
+        this.listCustomerServices = listCustomerServices;
+    }
+
+    public void addCustomerService() {
+        logger.debug("inside add product");
+        logger.debug("customer name:" + this.customerService.getProductName());
+        logger.debug("Frequency:" + this.customerService.getFrequencyType());
+        this.customer.addCustomerService(customerService);
+        logger.debug("Customer service size:" + this.customer.getCustomerServices().size());
+        this.customerService = new CustomerService();
+        this.selectedProduct = "";
+    }
+
+    public void removeCustomerService(CustomerService customerService) {
+        this.customer.removeCustomerService(customerService);
+    }
+
+    public String getSelectedProduct() {
+        return selectedProduct;
+    }
+
+    public void setSelectedProduct(String selectedProduct) {
+        if (selectedProduct != null && selectedProduct.contains("#")) {
+            String[] memberSet = selectedProduct.split("#");
+            this.customerService.setProductCode(memberSet[1]);
+            this.customerService.setProductName(memberSet[0]);
+        }
+        this.selectedProduct = selectedProduct;
+    }
+
+    @CatchException
+    public List<String> productAutoComplete(String query) {
+        logger.debug("inside product auto complete");
+        List<String> results = new ArrayList<String>();
+        map = this.productManager.findAllProductNameStartWith(query);
+        if (map != null) {
+            for (String key : map.keySet()) {
+                String value = map.get(key);
+                results.add(value + '#' + key);
+            }
+        }
+        return results;
+    }
+
+    @CatchException
+    public String onSave() {
+        logger.debug("inside on save");
+        this.customer.getAuditInfo().setCreatedBy(this.securityUtility.getPrinciple().getUsername());
+        this.customer.getAuditInfo().setCreatedOn(new Date());
+        this.customerManager.addNew(customer);
+        Messages.addInfo(null, "customer addes successfully.");
+        return "pretty:customers";
+    }
+
+    @CatchException
+    public String enableordisableService(CustomerService customerService) {
+
+        customerService.getAuditInfo().setModifiedBy(this.securityUtility.getPrinciple().getUsername());
+        customerService.getAuditInfo().setModifiedOn(new Date());
+        customerService.setActive(!customerService.isActive());
+        this.customerManager.enableordisableCustomerService(customerService);
+        Messages.addInfo(null, "Service disable successfully successfully.");
+        return null;
+
+    }
+
+}

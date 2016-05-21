@@ -1,0 +1,75 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:prettyfaces="http://ocpsoft.com/prettyfaces"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+    template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onNew="pretty:add_products" newPermissionKey="COMPANY_ADD"/>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form prependId="false" id="new_Agg">
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="Product Management &#187; Products &#187;All" />
+                </f:facet>
+            </p:panel>
+        </h:form>
+
+        <h:form prependId="false" id="payment_type_list_form">
+            <p:dataTable id="payment_list" var="product" value="#{productListController.product}" 
+                         paginator="true" rows="25" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="25,50,100"
+                         rowIndexVar="index">
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{msg['grid.serialNumber']}#" />
+                    </f:facet>
+                    <h:outputText value="#{index+1}" />
+                </p:column>
+
+                <p:column >
+                    <f:facet name="header">
+                        <h:outputText value="Name" />
+                    </f:facet>
+                    <h:outputText value="#{product.name}" />
+                </p:column>
+                
+                  <p:column >
+                    <f:facet name="header">
+                        <h:outputText value="Unit Price" />
+                    </f:facet>
+                      <h:outputText value="#{product.unitPrice}" />
+                </p:column>
+
+                
+
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="" />
+                    </f:facet>
+                    <prettyfaces:link mappingId="edit_products" title="View">
+                        <f:param value="#{product.code}" />
+                        <span class="view">View</span>
+                    </prettyfaces:link>
+
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+
+    </ui:define>
+</ui:composition>

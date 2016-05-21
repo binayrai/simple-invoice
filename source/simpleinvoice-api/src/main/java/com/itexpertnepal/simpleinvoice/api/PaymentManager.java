@@ -1,0 +1,22 @@
+package com.itexpertnepal.simpleinvoice.api;
+
+import com.itexpertnepal.simpleinvoice.domain.Payment;
+import java.util.List;
+
+/**
+ *
+ * @author binay
+ */
+public interface PaymentManager {
+
+    public String bulkPaymentProcess(String data, String userName);
+
+    public List<Object[]> finAll();
+
+    public String processInvoicePayment(Payment payment);
+
+    public List<Payment> findAllByCustCode(String custCode);
+
+    public Payment findByPaidMonth(String month, String custCode);
+
+}

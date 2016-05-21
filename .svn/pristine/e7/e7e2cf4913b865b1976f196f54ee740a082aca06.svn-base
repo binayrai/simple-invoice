@@ -1,0 +1,126 @@
+<p:panel xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:ui="http://java.sun.com/jsf/facelets"
+         xmlns:h="http://java.sun.com/jsf/html"
+         xmlns:f="http://java.sun.com/jsf/core"
+         xmlns:p="http://primefaces.org/ui"
+         xmlns:prettyfaces="http://ocpsoft.com/prettyfaces"
+         xmlns:c="http://java.sun.com/jsp/jstl/core"
+         style="border: none;">
+
+    <p:fieldset id="personalField" legend="Personal Information ">
+
+
+        <h:panelGrid columns="4" id="personal" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+            <h:outputLabel for="code" value="Code: * " style="width:175px;display: inline-block;"/>         
+            <h:inputText id="code" value="#{customerAddController.customer.code}" required="true" size="20"  /> 
+            <p:message for="code" />
+            <p:tooltip for="code" value="Enter Name " showEffect="fade" hideEffect="fade"/>
+
+
+
+            <h:outputLabel for="name" value="Customer Name: * " style="width:175px;display: inline-block;"/>         
+            <h:inputText id="name" value="#{customerAddController.customer.name}" required="true" size="20"  /> 
+            <p:message for="name" />
+            <p:tooltip for="name" value="Enter Name " showEffect="fade" hideEffect="fade"/>
+
+
+
+            <h:outputLabel for="account_number" value="Account Number: *" />         
+            <h:inputText id="account_number" value="#{customerAddController.customer.accountNumber}" required="true" size="20"  /> 
+            <p:message for="account_number" />
+            <p:tooltip for="account_number" value="Enter Citizenship Number " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="customer_contact" value="Customer Contact(Attn): " />         
+            <h:inputText id="customer_contact" value="#{customerAddController.customer.contact}"  size="20"  /> 
+            <p:message for="customer_contact" />
+            <p:tooltip for="customer_contact" value="Enter occupation " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="phone" value="Phone No: *" />         
+            <h:inputText id="phone" value="#{customerAddController.customer.phoneNo}" required="true" size="20"  />  
+            <p:message for="phone" />
+            <p:tooltip for="phone" value="Enter phone " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="mobile_phone" value="Mobile Phone No: *" />         
+            <h:inputText id="mobile_phone" value="#{customerAddController.customer.mobileNo}" required="true" size="20"  />  
+            <p:message for="mobile_phone" />
+            <p:tooltip for="mobile_phone" value="Enter mobile phone " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="fax" value="Fax No: *" />         
+            <h:inputText id="fax" value="#{customerAddController.customer.fax}" required="true" size="20"  />  
+            <p:message for="fax" />
+            <p:tooltip for="fax" value="Enter phone " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="email" value="Email:" />         
+            <h:inputText id="email" value="#{customerAddController.customer.emial}" size="20"  /> 
+            <p:message for="email" />
+            <p:tooltip for="email" value="Enter email " showEffect="fade" hideEffect="fade"/>
+        </h:panelGrid>
+
+    </p:fieldset>
+
+    <p:fieldset id="address_set" legend="Address">
+        <h:panelGrid columns="4" id="address_info" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+
+            <h:outputLabel for="street_add" value="Street Address: *" style="width:175px;display: inline-block;"/> 
+            <h:inputText id="street_add" value="#{customerAddController.customer.streetAddress}"  size="20"  /> 
+            <p:message for="street_add" />
+            <p:tooltip for="street_add" value="Enter occupation " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="street_add2" value="Street Address2: *" /> 
+            <h:inputText id="street_add2" value="#{customerAddController.customer.streetAddressTwo}"  size="20"  /> 
+            <p:message for="street_add2" />
+            <p:tooltip for="street_add2" value="Enter occupation " showEffect="fade" hideEffect="fade"/>
+
+
+
+            <h:outputLabel for="state" value="State: *" style="width:175px;display: inline-block;"/> 
+            <h:inputText id="state" value="#{customerAddController.customer.state}"  size="20"  /> 
+            <p:message for="state" />
+            <p:tooltip for="state" value="Enter state " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="zip_code" value="Zip Code: *" style="width:175px;display: inline-block;"/> 
+            <h:inputText id="zip_code" value="#{customerAddController.customer.zipCode}"  size="20"  /> 
+            <p:message for="zip_code" />
+            <p:tooltip for="zip_code" value="Enter zip code " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="city" value="City: *" />         
+            <h:inputText id="city" value="#{customerAddController.customer.city}" required="true" size="20"  /> 
+            <p:message for="city" />
+            <p:tooltip for="city" value="Enter city " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="country" value="Country: " />         
+            <h:inputText id="country" value="#{customerAddController.customer.country}"  size="20"  /> 
+            <p:message for="country" />
+            <p:tooltip for="country" value="Enter Country " showEffect="fade" hideEffect="fade"/>
+
+        </h:panelGrid>
+    </p:fieldset>
+
+    <p:fieldset id="credit_card" legend="Credit Card Detials">
+        <h:panelGrid columns="4" id="credit_card_info" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+            <h:outputLabel for="holder_name" value="Credit Card Holder Name: *" style="width:175px;display: inline-block;" /> 
+            <h:inputText id="holder_name" value="#{customerAddController.customer.creditCardHolderName}"  size="20"  /> 
+            <p:message for="holder_name" />
+            <p:tooltip for="holder_name" value="Enter occupation " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="card_number" value="Credit Card Number *" /> 
+            <h:inputText id="card_number" value="#{customerAddController.customer.creditCardNo}"  size="20"  /> 
+            <p:message for="card_number" />
+            <p:tooltip for="card_number" value="Enter occupation " showEffect="fade" hideEffect="fade"/>
+
+            <h:outputLabel for="expiry_date" value="Credit Card Expiry Date: *" />
+            <p:calendar id="expiry_date" value="#{customerAddController.customer.creditCardExpiryDate}" required="true" size="10"/>  
+            <p:message for="expiry_date" />
+            <p:tooltip for="expiry_date" value="Select Date of join " showEffect="fade" hideEffect="fade"/>
+
+
+
+        </h:panelGrid>
+    </p:fieldset>
+
+
+
+</p:panel>

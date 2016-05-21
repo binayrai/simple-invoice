@@ -1,0 +1,34 @@
+package com.itexpertnepal.simpleinvoice.ui.controller.customer;
+
+import com.itexpertnepal.simpleinvoice.api.CustomerManager;
+import com.itexpertnepal.simpleinvoice.domain.Customer;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringRequestScoped;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+@SpringRequestScoped
+public class CustomerListController {
+
+    @Autowired
+    private CustomerManager customerManager;
+
+    private List<Customer> customers;
+
+    public List<Customer> getCustomers() {
+        if (this.customers == null) {
+            this.customers = this.customerManager.findAll();
+        }
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
+
+}

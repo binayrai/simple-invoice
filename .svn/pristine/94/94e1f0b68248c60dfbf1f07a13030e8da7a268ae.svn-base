@@ -1,0 +1,26 @@
+package com.itexpertnepal.simpleinvoice.ui.job.schedular;
+
+import com.itexpertnepal.simpleinvoice.api.InvoiceManager;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+public class ReoccuranceJob implements Job {
+
+    @Autowired
+    private InvoiceManager invoiceManager;
+
+    @Override
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
+        //invoiceManager.reoccuranceTrigger();
+        System.out.println("Reoccurance Generated for this month.");
+    }
+
+}

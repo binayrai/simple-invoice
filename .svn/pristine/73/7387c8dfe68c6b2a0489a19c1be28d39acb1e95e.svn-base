@@ -1,0 +1,154 @@
+package com.itexpertnepal.simpleinvoice.domain.common;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.persistence.CollectionTable;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+/**
+ *
+ * @author binay
+ */
+@Entity
+@Table(name = "roles")
+public class Role extends AbstractEntity implements Serializable {
+
+    public static final String DEFAULT_ROLE_NAME = "DEFAULT";
+    public static final String ADMIN_ROLE_NAME = "ADMIN";
+    public static final String COMPANY_ADMIN_ROLE_NAME = "COMPANY_ADMIN";
+    public static final String CLIENT_ROLE_NAME = "CLIENT";
+    public static final String CLIENT_USER_ROLE_NAME = "CLIENT_USER";
+    private static final long serialVersionUID = 1L;
+    private String roleName;
+    private List<Permission> permissions;
+    private RoleType roleType;
+    private String companyCode;
+
+    public Role(Long id, String roleName) {
+        this.setId(id);
+        this.roleName = roleName;
+    }
+
+    public Role(long id) {
+        this();
+        this.setId(id);
+    }
+
+    public Role() {
+        this.permissions = new ArrayList<Permission>();
+    }
+
+    public Role(String roleName, RoleType roleType) {
+        this();
+        this.roleName = roleName;
+        this.roleType = roleType;
+    }
+
+    @NotNull
+    @Column(name = "role_name", unique = true)
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "role_permission")
+    @Column(name = "permission")
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    protected void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public void addPermission(Permission permission) {
+        if (!this.permissions.contains(permission)) {
+            this.permissions.add(permission);
+        }
+    }
+
+    public List<String> permissionAsStringList() {
+        List<String> list = new ArrayList<String>();
+        for (Permission p : this.permissions) {
+            list.add(p.name());
+        }
+        return list;
+    }
+
+    public void addPermission(List<String> permissions) {
+        for (String s : permissions) {
+            this.permissions.add(Permission.valueOf(s));
+        }
+    }
+
+    @Column(name = "company_code")
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public enum RoleType {
+
+        DEFAULT, ADMIN, COMPANY_ADMIN, CLIENT, CLIENT_USER
+    }
+
+    @Column(name = "role_type")
+    @Enumerated(EnumType.STRING)
+    public RoleType getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.getId());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Role other = (Role) obj;
+        if (!Objects.equals(this.getId(), other.getId())) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.getId());
+    }
+
+    public void cleanAllPermission() {
+        this.permissions.clear();
+    }
+
+}

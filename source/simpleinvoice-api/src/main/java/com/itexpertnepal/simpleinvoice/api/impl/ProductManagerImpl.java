@@ -1,0 +1,128 @@
+package com.itexpertnepal.simpleinvoice.api.impl;
+
+import com.itexpertnepal.simpleinvoice.api.ProductManager;
+import com.itexpertnepal.simpleinvoice.domain.CustomerService;
+import com.itexpertnepal.simpleinvoice.domain.Product;
+import com.itexpertnepal.simpleinvoice.repository.CustomerServiceRepository;
+import com.itexpertnepal.simpleinvoice.repository.ProductRepository;
+import com.itexpertnepal.simpleinvoice.utl.logger.Log;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author binay
+ */
+@Service
+@Transactional(readOnly = true)
+class ProductManagerImpl implements ProductManager {
+
+    @Autowired
+    private ProductRepository productRepository;
+    @Log
+    private Logger logger;
+    @Autowired
+    private CustomerServiceRepository customerServiceRepository;
+
+    @Autowired
+    private DataSource dataSource;
+
+    private Connection getDBConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
+
+    @Transactional
+    public Product addNew(Product t) {
+        Product product = this.findByCode(t.getCode());
+        if (product != null) {
+            throw new IllegalArgumentException("Product code already exist.");
+        }
+        t.setActive(true);
+        return this.productRepository.save(t);
+
+    }
+
+    public void addAll(List<Product> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Transactional
+    public void update(Product t) {
+        this.productRepository.save(t);
+    }
+
+    @Transactional
+    public void remove(Product t) {
+        CustomerService cs =  this.customerServiceRepository.findByProductCode(t.getCode());
+        if(cs != null){
+            throw new IllegalArgumentException("Product has already been assigned to the customer.");
+        }
+       
+        this.productRepository.delete(t);
+    }
+
+    public void removeBy(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Product find(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Transactional
+    public List<Product> findAll() {
+        return this.productRepository.findAll();
+    }
+
+    public List<Product> findWithPaging(int pageSize, int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Product findByCode(String code) {
+        return this.productRepository.findByCode(code);
+    }
+
+    public List<Product> findAllByGeneralInvoiceType() {
+        return this.productRepository.findByInvoiceType(Product.InvoiceType.General);
+    }
+
+    public Map findAllProductNameStartWith(String expression) {
+        Map results = new HashMap<String, String>();
+        ResultSet rs = null;
+        Connection connect = null;
+        PreparedStatement preparedStatement = null;
+        String sql = "select code,name from products where upper(name) like upper(?) and 1=1 and invoice_type = 'Reocurrance' and is_active = 'true'";
+        try {
+            connect = this.getDBConnection();
+            preparedStatement = connect.prepareStatement(sql);
+            preparedStatement.setString(1, expression + "%");
+            // preparedStatement.setString(3, branchCode);
+            rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                results.put(rs.getString("code"), rs.getString("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                preparedStatement.close();
+                connect.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        this.logger.debug("Result size:" + results.size());
+        return results;
+    }
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html" id="menu"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:prettyfaces="http://ocpsoft.com/prettyfaces">
+    <p:panel style="border-radius:15px; height:30px; margin-bottom: 10px;  background-image: linear-gradient(#E7E7E7, #666666);">
+        <div align="center">
+            <h:form >
+                <span>
+                    <prettyfaces:link mappingId="home" title="#{msg['menu.home']}">
+                        <h:graphicImage value="#{resource['icons:home.png']}" />
+                    </prettyfaces:link>
+
+                    <h:outputText value="&nbsp;&nbsp;" />
+
+                    <prettyfaces:link mappingId="logout" title="Log Out">
+                        <h:graphicImage value="#{resource['icons:logout.png']}" />
+                    </prettyfaces:link>
+                </span>
+            </h:form>
+        </div>
+    </p:panel>
+
+    <h:form prependId="false">
+        <p:accordionPanel activeIndex="#{menuBinder.tabIndex}" 
+                          style="border: none; width:98%; font-size: 12px;  " id="main_menu_tab">
+            <p:ajax event="tabChange" listener="#{menuBinder.onTabChange}" />
+
+            <p:tab title="#{preferenceController.currentUser.userName}" id="preferences">
+                <p:menuitem immediate="true">
+                    <prettyfaces:link mappingId="myPreferences" title="#{msg['menu.myPreferences']}">
+                        <h:graphicImage value="#{resource['icons:farmer.png']}" />Preference
+                    </prettyfaces:link>
+
+                </p:menuitem>
+
+            </p:tab>
+
+            <p:tab title="Company Management" id="company" rendered="#{menuChecker.admin}" >
+                <p:menuitem immediate="true">
+                    <prettyfaces:link mappingId="companies" title="Role">
+                        <h:graphicImage value="#{resource['icons:banks.png']}" /> Company
+                    </prettyfaces:link>
+                </p:menuitem>            
+
+            </p:tab>  
+
+
+
+            <p:tab title="User Management" id="user_mgmt" rendered="#{menuChecker.hasGroupRight('USER_VIEW,ROLE_VIEW')}">
+                <p:menuitem immediate="true">
+                    <prettyfaces:link mappingId="roles" title="Role" rendered="#{menuChecker.hasRight('ROLE_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:roles.png']}" />Role
+                    </prettyfaces:link>
+                    <br/>
+                    <prettyfaces:link mappingId="users" title="user" rendered="#{menuChecker.hasRight('USER_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:users.png']}" />User
+                    </prettyfaces:link>
+
+                </p:menuitem>
+
+            </p:tab>   
+
+            <p:tab title="Setting" id="setting" rendered="#{menuChecker.hasGroupRight('TAX_RATE_VIEW,PAYMENT_TYPES_VIEW')}">
+
+                <p:menuitem immediate="true">
+                    <prettyfaces:link mappingId="tax_rates" title="Role" rendered="#{menuChecker.hasRight('TAX_RATE_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:loan.png']}" />Tax Rates
+                    </prettyfaces:link>
+
+                </p:menuitem>
+                <br/>
+
+                <prettyfaces:link mappingId="payment_types" title="Payment Type" rendered="#{menuChecker.hasRight('PAYMENT_TYPES_VIEW')}">
+                    <h:graphicImage value="#{resource['icons:loan.png']}" />&nbsp; Payment Types
+                </prettyfaces:link>
+
+            </p:tab>  
+
+            <p:tab title="Product Management" id="Prod_mgmt" rendered="#{menuChecker.hasGroupRight('PRODUCT_VIEW')}">
+                <p:menuitem immediate="true">
+                    <prettyfaces:link mappingId="products" title="Product" rendered="#{menuChecker.hasRight('PRODUCT_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:loanapplication.png']}" />Products
+                    </prettyfaces:link>
+                </p:menuitem>
+            </p:tab>
+
+            <p:tab title="People Management" id="people_mgnt" rendered="#{menuChecker.hasGroupRight('CUSTOMER_VIEW,BILLER_VIEW')}">
+                <p:menuitem immediate="true">
+
+                    <prettyfaces:link mappingId="customers" title="Customers" rendered="#{menuChecker.hasRight('CUSTOMER_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:harvest.png']}" /> Customer
+                    </prettyfaces:link>
+                    <br/>
+                    <prettyfaces:link mappingId="biller" title="Biller " rendered="#{menuChecker.hasRight('BILLER_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:member_property.png']}" /> Biller
+                    </prettyfaces:link>
+                </p:menuitem>
+
+            </p:tab>
+
+            <p:tab title="Money Management" id="money_mgmt" rendered="#{menuChecker.hasGroupRight('INVOICE_VIEW,RECURRENCE_VIEW,PAYMENT_VIEW')}">
+                <p:menuitem immediate="true">
+
+
+                    <prettyfaces:link mappingId="invoice" title="Invoice" rendered="#{menuChecker.hasRight('INVOICE_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:traders.png']}" />General Invoice
+                    </prettyfaces:link>
+                    <br/>
+                    <prettyfaces:link mappingId="recurrence" title="Recurrence" rendered="#{menuChecker.hasRight('RECURRENCE_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:POS.png']}" />Recurrence
+                    </prettyfaces:link>
+                    <br/>
+                    <prettyfaces:link mappingId="payment" title="Payment" rendered="#{menuChecker.hasRight('PAYMENT_VIEW')}">
+                        <h:graphicImage value="#{resource['icons:shrinkage.png']}" />Payment                   
+                    </prettyfaces:link>
+                </p:menuitem>
+
+            </p:tab>
+        </p:accordionPanel>
+    </h:form>
+</ui:composition>

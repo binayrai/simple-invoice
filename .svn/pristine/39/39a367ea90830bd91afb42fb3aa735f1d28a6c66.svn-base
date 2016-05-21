@@ -1,0 +1,186 @@
+package com.itexpertnepal.simpleinvoice.domain.common;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import org.hibernate.validator.constraints.Email;
+
+/**
+ *
+ * @author binay
+ */
+@Entity
+@Table(name = "users")
+public class User extends AbstractEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    private String userName;
+    private String password;
+    private Set<Role> roles;
+    private String companyCode;
+    private String clientCode;
+    private boolean rootUser = false;
+    private Role.RoleType roleType;
+
+    public User(String userName, String password) {
+        this();
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public User() {
+        this.roles = new HashSet<Role>();
+        this.rootUser = false;
+    }
+
+    public User(String userName, String password, Set<Role> roles) {
+        this(userName, password);
+        this.roles = roles;
+    }
+
+    public User(String userName, String password, Role role) {
+        this(userName, password);
+        this.roles.add(role);
+    }
+
+    @Column(name = "password")
+    public String getPassword() {
+        if (this.password == null) {
+            this.password = "12345";
+        }
+        return password;
+    }
+
+    @Column(name = "user_name", unique = true, updatable = false)
+    @Email(message = "User name must be Email format.")
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinTable(name = "user_role",
+            joinColumns
+            = @JoinColumn(name = "user_id"),
+            inverseJoinColumns
+            = @JoinColumn(name = "role_id"))
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        if (!this.roles.contains(role)) {
+            this.roles.add(role);
+        }
+    }
+
+    public void addRole(Collection<Role> roles) {
+        if (this.roles == null) {
+            this.roles = new HashSet<Role>();
+        } else {
+            this.roles.clear();
+        }
+        this.roles.addAll(roles);
+    }
+
+    public List<Role> roleAsList() {
+        return new ArrayList<Role>(this.roles);
+    }
+
+    @Column(name = "role_type")
+    @Enumerated(EnumType.STRING)
+    public Role.RoleType getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(Role.RoleType roleType) {
+        this.roleType = roleType;
+    }
+
+    @Column(name = "agent_code", nullable = true)
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    @Column(name = "client_code", nullable = true)
+    public String getClientCode() {
+        return clientCode;
+    }
+
+    public void setClientCode(String clientCode) {
+        this.clientCode = clientCode;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.getId());
+        hash = 23 * hash + Objects.hashCode(this.userName);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (!Objects.equals(this.getId(), other.getId())) {
+            return false;
+        }
+        if (!Objects.equals(this.userName, other.userName)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Column(name = "root_user")
+    public boolean isRootUser() {
+        return rootUser;
+    }
+
+    public void setRootUser(boolean rootUser) {
+        this.rootUser = rootUser;
+    }
+
+//    @Transient
+//    public String getHashedPassword() {
+//        if (this.password == null) {
+//            this.password = "12345";
+//        }
+//        PasswordEncoder encoder = new Md5PasswordEncoder();
+//        return encoder.encodePassword(this.password, null);
+//    }
+}

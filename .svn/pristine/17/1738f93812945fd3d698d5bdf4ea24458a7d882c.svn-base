@@ -1,0 +1,117 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:prettyfaces="http://ocpsoft.com/prettyfaces"
+      >
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet library="css" name="screen.css" />
+        <h:outputStylesheet library="css" name="default.css" />
+
+        <link type="text/css" rel="stylesheet"
+              href="#{request.contextPath}/resources/css/start/skin.css" />
+        <link type="text/css" rel="stylesheet"
+              href="#{request.contextPath}/resources/css/default.css" />
+
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+
+        <script type="text/javascript">
+            window.pageContext = '${request.contextPath}';
+
+            function showProgress(data) {
+                alert("hyy");
+                var inputId = data.source.id;
+                var progressbarId = inputId.substring(0, inputId.length - "name".length)
+                        + "pole";
+                if (data.status === "begin")
+                    Element.show(progressbarId);
+                else if (data.status === "success")
+                    Element.hide(progressbarId);
+            }
+
+        </script>
+
+        <title>
+            EHLEE: EMERSONHLEE BILLING AND INVOICING SYSTEM<ui:insert name="title" />
+
+
+
+        </title>
+
+    </h:head>
+
+    <h:body>
+
+
+        <p:layout fullPage="true">
+            <f:event type="preRenderView" listener="true" />
+            <p:layoutUnit position="north" size="60" resizable="false"
+                          closable="false" collapsible="false" >
+                <div id="top" class="ui-widget ui-widget-header"
+                     style="height: 65px; border-radius:15px 15px 0px 0px;" align="center" >
+                    <div style="float: left; width: 420px; text-align: left; display: inline; vertical-align: middle; padding:12px;">                        
+                        <h:outputLink   value="http://www.itexpertnepal.net/" target="_blank">
+                            <h:graphicImage value="#{resource['icons:emersonnlee_logo.png']}" title="Itexport Technology"/>
+                        </h:outputLink>
+                        <span style="font-size: 20px; "> 
+                            EMERSON H LEE 
+                        </span>
+                        <span><br/>    BILLING AND INVOICING SYSTEM</span>
+                    </div>
+                    <div
+                        style="float: right; width: 300px; text-align: center; margin-right: 10px;">
+                        <br />
+                        <ui:insert name="toolbar">Tool bar</ui:insert>
+                    </div>
+                    <div align="center">
+                        <h:form prependId="false" id="mess_form">
+                            <p:messages globalOnly="true" showDetail="true"
+                                        showSummary="false" id="msg_global" />
+                        </h:form>
+                    </div>
+
+                </div>
+
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="215" resizable="false"
+                          closable="false" collapsible="false">
+
+                <ui:include src="/WEB-INF/templates/menu.xhtml" /> 
+            </p:layoutUnit>
+
+
+            <p:layoutUnit position="center" 
+                          style="margin-left: 1px;margin-right: 1px;">
+                <f:view contentType="text/html; charset=utf-8">          
+                    <ui:insert name="content">Content</ui:insert>                    
+                </f:view>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="25" resizable="false"
+                          style="border: none" closable="false" collapsible="false">
+                <div id="footer" class="ui-widget ui-widget-header"
+                     style="height: 23px; padding-bottom: 2px;">
+
+                    <div style="float: left; width: 400px; text-align: left;">
+                        <p class="copyright">
+                            <a href="http://itexpertnepal.net/" style="text-decoration-color: white;"
+                               target="_blank"> IT Expert Nepal </a>
+                        </p>
+                        #{msg['application.copyrights']}
+                    </div>
+
+                    <div
+                        style="float: right; width: 300px; text-align: center; margin-right: 5px;">
+                        #{msg['application.version']}:-0.0.1 ALFA (20130331)</div>
+                </div>
+            </p:layoutUnit>
+        </p:layout>
+
+    </h:body>
+
+</html>

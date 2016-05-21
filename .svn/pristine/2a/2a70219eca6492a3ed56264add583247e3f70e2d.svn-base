@@ -1,0 +1,60 @@
+package com.itexpertnepal.simpleinvoice.api.impl;
+
+import com.itexpertnepal.simpleinvoice.api.ProductManager;
+import com.itexpertnepal.simpleinvoice.domain.Product;
+import com.itexpertnepal.simpleinvoice.repository.ProductRepository;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author binay
+ */
+@Service
+@Transactional(readOnly = true)
+class ProductManagerImpl implements ProductManager {
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    public Product addNew(Product t) {
+        return this.productRepository.save(t);
+
+    }
+
+    public void addAll(List<Product> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Transactional
+    public void update(Product t) {
+this.productRepository.save(t);
+    }
+
+    public void remove(Product t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void removeBy(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Product find(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Transactional
+    public List<Product> findAll() {
+   return this.productRepository.findAll();    }
+
+    public List<Product> findWithPaging(int pageSize, int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Product findByCode(String code) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+}

@@ -1,0 +1,17 @@
+package com.itexpertnepal.simpleinvoice.repository;
+
+import com.itexpertnepal.simpleinvoice.domain.Invoice;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ *
+ * @author binay
+ */
+@Repository
+
+public interface InvoiceRepository extends JpaRepository<Invoice, String> {
+
+    public Invoice findByInvoiceNumber(String code);
+
+}

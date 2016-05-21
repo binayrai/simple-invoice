@@ -1,0 +1,90 @@
+package com.itexpertnepal.simpleinvoice.api.common.impl;
+
+import com.itexpertnepal.simpleinvoice.api.common.RoleManager;
+import com.itexpertnepal.simpleinvoice.domain.common.Permission;
+import com.itexpertnepal.simpleinvoice.domain.common.Role;
+import com.itexpertnepal.simpleinvoice.repository.RoleRepository;
+import java.util.List;
+import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+/**
+ *
+ * @author binay
+ */
+@Service
+@Transactional(readOnly = true)
+class RoleManagerImpl implements RoleManager {
+
+    @Autowired
+    private RoleRepository roleRepository;
+    private static final Logger LOG = Logger.getLogger(RoleManagerImpl.class.getName());
+
+    @Transactional
+    public Role addNew(Role t) {
+        for (Permission p : t.getPermissions()) {
+            LOG.info("Selected Permission:" + p.name());
+        }
+        Role temp = this.roleRepository.findByRoleName(t.getRoleName());
+        if ((t.getId() == null) && (temp != null)) {
+            throw new IllegalArgumentException("Role already exist");
+        } else if ((temp != null)) {
+            if (temp.getId().longValue() != t.getId().longValue()) {
+                throw new IllegalArgumentException("Role already exist");
+            }
+        }
+        if (CollectionUtils.isEmpty(t.getPermissions())) {
+            throw new IllegalArgumentException("Permission can't be empty");
+        }
+        t.setActive(true);
+        return roleRepository.save(t);
+    }
+
+    public void addAll(List<Role> list) {
+        this.roleRepository.save(list);
+    }
+
+    @Transactional
+    public void update(Role t) {
+        for (Permission p : t.getPermissions()) {
+            LOG.info("Selected Permission:" + p.name());
+        }
+        this.roleRepository.save(t);
+    }
+
+    public void remove(Role t) {
+        this.roleRepository.save(t);
+    }
+
+    public void removeBy(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Role find(Long id) {
+        return this.roleRepository.findOne(id);
+    }
+
+    public List<Role> findAll() {
+        return this.roleRepository.findAll();
+    }
+
+    public List<Role> findWithPaging(int pageSize, int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Role findByRoleName(String roleName) {
+        return this.roleRepository.findByRoleName(roleName);
+    }
+
+    public List<Role> findAllClientRole() {
+        return this.roleRepository.findByRoleType(Role.RoleType.CLIENT);
+    }
+
+    public List<Role> findAllClientUserRole() {
+        return this.roleRepository.findByClientUserRole(Role.RoleType.CLIENT_USER);
+    }
+
+}

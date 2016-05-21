@@ -1,0 +1,131 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/templates/template.xhtml"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar">
+
+    <ui:define name="title">
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onCancel="pretty:invoice"  />
+    </ui:define>
+
+
+    <ui:define name="content">
+
+        <h:form prependId="false" id="new_Agg">
+            <p:ajaxStatus onstart="statusDialog.show();"
+                          onsuccess="statusDialog.hide();" />
+
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status"
+                      draggable="false" closable="false">
+                <h:graphicImage value="#{resource['images:ajaxloadingbar.gif']}" />
+            </p:dialog>
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="Money Management &#187; Invoice &#187;Report" />
+                </f:facet>
+            </p:panel>
+
+
+
+            <p:panel id="memberwise_export" header="Export Data">
+                <h:commandButton value="" type="button" action="#{invoiceEditController.exportInvoiceToPdf}"  image="#{resource['icons:pdf_big.png']}" title="Pdf download"/>
+            </p:panel>
+
+
+            <p:panel header="Invoice Summery"> 
+
+                <h:panelGrid columns="2" id="payment_list" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+                    <h:outputLabel  value="Invoice No: " />
+                    <h:outputLabel  value="#{invoiceEditController.invoice.invoiceNumber}" style="font-weight: bold" />
+
+
+                    <h:outputLabel  value="Invoice Date: " />
+                    <h:outputLabel  value="#{invoiceEditController.invoice.date}" style="font-weight: bold" />
+
+
+                    <h:outputLabel  value="Biller: " />
+                    <h:outputLabel  value="#{invoiceEditController.invoice.billerName}" style="font-weight: bold"/>
+
+
+                    <h:outputLabel  value="Customer: " />
+                    <h:outputLabel  value="#{invoiceEditController.invoice.customerName}" style="font-weight: bold"/>
+                </h:panelGrid>
+
+            </p:panel>
+
+
+            <p:dataTable id="invoice_list" var="invoice" value="#{invoiceEditController.listObjInvoice}">  
+
+                <f:facet name="header">  
+                    Invoice
+                </f:facet>  
+
+                <p:columnGroup type="header">  
+                    <p:row>  
+                        <p:column  headerText="Item" />  
+                        <p:column  headerText="Quantity" /> 
+                        <p:column  headerText="Unit Cost" /> 
+                        <p:column  headerText="Price" /> 
+
+                    </p:row>  
+
+                </p:columnGroup>  
+
+                <p:column>  
+                    <h:outputText value="#{invoice[1].name}" />
+
+                </p:column>  
+
+                <p:column style="text-align:right">  
+                    <h:outputText value="#{invoice[0].quantity}" />
+
+                </p:column>  
+
+                <p:column  style="text-align:right"  >  
+                    <h:outputText value="#{invoice[0].unitPrice}" />
+                </p:column>  
+
+                <p:column  style="text-align:right;" >  
+                    <h:outputText value=" #{invoice[0].quantity * invoice[0].unitPrice}$" />
+
+                </p:column>  
+
+
+
+                <p:columnGroup type="footer">  
+                    <p:row>  
+                        <p:column colspan="3" footerText="Sub Totals"  
+                                  style="text-align:right"  />  
+
+                        <p:column footerText="#{invoiceEditController.subTotal}$" style="text-align:right" >
+
+                        </p:column>
+
+                    </p:row>  
+
+                    <p:row>  
+                        <p:column colspan="3" footerText="Invoice Amount"  
+                                  style="text-align:right"  />  
+
+                        <p:column footerText="#{invoiceEditController.invoiceTotal}$" style="text-align:right" >
+
+                        </p:column>
+                    </p:row> 
+                </p:columnGroup>  
+
+                <f:facet name="footer">  
+                    invoice
+                </f:facet>  
+
+            </p:dataTable>  
+        </h:form>  
+
+
+    </ui:define>
+</ui:composition>

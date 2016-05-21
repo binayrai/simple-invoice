@@ -1,0 +1,14 @@
+package com.itexpertnepal.simpleinvoice.repository;
+
+import com.itexpertnepal.simpleinvoice.domain.common.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+/**
+ *
+ * @author binay
+ */
+public interface RoleRepository extends JpaRepository<Role, Long> {
+
+    public Role findByRoleName(String roleName);
+
+}

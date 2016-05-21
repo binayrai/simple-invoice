@@ -1,0 +1,136 @@
+package com.itexpertnepal.simpleinvoice.domain;
+
+import com.itexpertnepal.simpleinvoice.domain.common.AbstractEntity;
+import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+/**
+ *
+ * @author binay
+ */
+@Entity
+@Table(name = "invoice_details")
+public class InvoiceDetails extends AbstractEntity implements Serializable {
+
+    private int quantity;
+    private String productCode;
+    private String productName;
+    private String tax;
+    private double unitPrice;
+    private Invoice invoice;
+
+    public InvoiceDetails() {
+    }
+
+    public InvoiceDetails(int quantity, String productCode, String tax, double unitPrice, Invoice invoice) {
+
+        this.quantity = quantity;
+        this.productCode = productCode;
+        this.tax = tax;
+        this.unitPrice = unitPrice;
+        this.invoice = invoice;
+    }
+
+    @Column(name = "quantity")
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    @Column(name = "product_code")
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    @Column(name = "product_name")
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    @Column(name = "tax")
+    public String getTax() {
+        return tax;
+    }
+
+    public void setTax(String tax) {
+        this.tax = tax;
+    }
+
+    @Column(name = "unit_price")
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "invoice_id")
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + this.quantity;
+        hash = 53 * hash + (this.productCode != null ? this.productCode.hashCode() : 0);
+        hash = 53 * hash + (this.tax != null ? this.tax.hashCode() : 0);
+        hash = 53 * hash + (int) (Double.doubleToLongBits(this.unitPrice) ^ (Double.doubleToLongBits(this.unitPrice) >>> 32));
+        hash = 53 * hash + (this.invoice != null ? this.invoice.hashCode() : 0);
+        hash = 53 * hash + (this.getId() != null ? this.getId().hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InvoiceDetails other = (InvoiceDetails) obj;
+        if (this.quantity != other.quantity) {
+            return false;
+        }
+        if ((this.productCode == null) ? (other.productCode != null) : !this.productCode.equals(other.productCode)) {
+            return false;
+        }
+        if ((this.tax == null) ? (other.tax != null) : !this.tax.equals(other.tax)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.unitPrice) != Double.doubleToLongBits(other.unitPrice)) {
+            return false;
+        }
+        if (this.invoice != other.invoice && (this.invoice == null || !this.invoice.equals(other.invoice))) {
+            return false;
+        }
+        if (this.getId() != other.getId() && (this.getId() == null || !this.getId().equals(other.getId()))) {
+            return false;
+        }
+        return true;
+    }
+
+}

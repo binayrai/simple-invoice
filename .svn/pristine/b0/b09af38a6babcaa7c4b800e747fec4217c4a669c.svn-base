@@ -1,0 +1,66 @@
+package com.itexpertnepal.simpleinvoice.domain;
+
+import com.itexpertnepal.simpleinvoice.domain.common.AbstractEntity;
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ *
+ * @author binay
+ */
+@Entity
+@Table(name = "customer_services")
+public class CustomerService extends AbstractEntity implements Serializable {
+
+    private String productCode;
+    private String customerCode;
+    private String frequency;
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + (this.getId() != null ? this.getId().hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CustomerService other = (CustomerService) obj;
+        if (this.getId() != other.getId() && (this.getId() == null || !this.getId().equals(other.getId()))) {
+            return false;
+        }
+        return true;
+    }
+
+}

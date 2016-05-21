@@ -1,0 +1,95 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+    template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="#{msg['menu.userManagement.role']}"></h:outputText>
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onSave="save" onCancel="pretty:companies" updatePermissionKey="COMPANY_EDIT" deletePermissionKey="COMPANY_DELETE" onDelete="delete"/>
+    </ui:define>
+    <ui:define name="content">
+
+        <h:form prependId="false" id="object">            
+            <h:messages globalOnly="false" />
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="Company Management &#187; Company &#187; Edit"/>                    
+                </f:facet>
+            </p:panel>
+            <h:panelGrid columns="4" id="bank" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+                <h:outputLabel for="bank_code" value=" Code: *" />
+                <h:inputText id="bank_code" required="true" size="15" value="#{companyEditController.company.code}" readonly="true" />
+                <p:message for="bank_code" />
+                <p:tooltip for="bank_code" value="Is alfa-numeric and Must not contain any special characters except [-]" showEffect="fade" hideEffect="fade"/>
+
+                <h:outputLabel for="name" value="Name: *" />
+                <h:inputText id="name" required="true" size="40" value="#{companyEditController.company.name}" />
+                <p:message for="name" />
+                <p:tooltip for="name" value="Enter Company Name" showEffect="fade" hideEffect="fade"/>
+
+
+                <h:outputLabel for="bank_phone_number" value="Phone Number: *" />
+                <h:inputText id="bank_phone_number" required="true" size="30" value="#{companyEditController.company.phoneNo}" />
+                <p:message for="bank_phone_number" />
+                <p:tooltip for="bank_phone_number" value="Enter Phone Number" showEffect="fade" hideEffect="fade"/>
+
+                <h:outputLabel for="bank_address" value="Address: *" />
+                <h:inputText id="bank_address" required="true" size="30" value="#{companyEditController.company.address}" />
+                <p:message for="bank_address" />
+                <p:tooltip for="bank_address" value="Enter Address " showEffect="fade" hideEffect="fade"/>
+
+            </h:panelGrid>
+            <h:commandButton id="save" action="#{companyEditController.onUpdate}" value="Save" style="display: none"  />
+
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="Admin Information" />
+                </f:facet>
+            </p:panel>
+            <h:panelGrid columns="4" id="agent_entry_credential" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+                <h:outputLabel for="sys_name" value="Name: *" />
+                <h:inputText id="sys_name" value="#{companyEditController.company.adminName}"
+                             required="true" size="40">
+                </h:inputText>
+                <p:message for="sys_name" />
+                <p:tooltip for="sys_name" value="Enter Admin Name " showEffect="fade" hideEffect="fade"/>
+
+                <h:outputLabel for="adminMobile" value="Admin Mobile: *" />
+                <h:inputText id="adminMobile"
+                             value="#{companyEditController.company.adminMobileNo}" required="true" size="20"
+                             maxlength="13">
+                </h:inputText>
+                <p:message for="adminMobile" />
+                <p:tooltip for="adminMobile" value="Enter Admin Mobile Number " showEffect="fade" hideEffect="fade"/>
+
+
+                <h:outputLabel for="user_id" value="User ID: *" />
+                <h:inputText id="user_id" value="#{companyEditController.company.adminUserName}"
+                             required="true" size="40"/>
+                <p:message for="user_id" />
+                <p:tooltip for="user_id" value="Enter user Id For Login.User Id should be Email Format " showEffect="fade" hideEffect="fade"/>
+
+
+            </h:panelGrid>
+
+
+
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value=" "/>
+                </f:facet>
+            </p:panel>
+
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>

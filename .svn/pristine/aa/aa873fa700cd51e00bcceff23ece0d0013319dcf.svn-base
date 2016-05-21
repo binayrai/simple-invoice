@@ -1,0 +1,94 @@
+package com.itexpertnepal.simpleinvoice.ui.controller.invoice;
+
+import com.itexpertnepal.simpleinvoice.api.InvoiceManager;
+import com.itexpertnepal.simpleinvoice.domain.Invoice;
+import com.itexpertnepal.simpleinvoice.domain.InvoiceDetails;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringViewScoped;
+import com.itexpertnepal.simpleinvoice.ui.aspect.CatchException;
+import com.itexpertnepal.simpleinvoice.ui.security.SpringSecurityUtility;
+import com.itexpertnepal.simpleinvoice.utl.logger.Log;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import org.omnifaces.util.Messages;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+@SpringViewScoped
+public class InvoiceAddController {
+
+    private Invoice invoice;
+    private InvoiceDetails invoiceDetails;
+    private List<InvoiceDetails> listInvoiceDetailses;
+
+    @Log
+    private Logger logger;
+    @Autowired
+    private InvoiceManager invoiceManager;
+    @Autowired
+    private SpringSecurityUtility securityUtility;
+
+    @PostConstruct
+    public void init() {
+        this.invoice = new Invoice();
+        this.invoiceDetails = new InvoiceDetails();
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
+    public InvoiceDetails getInvoiceDetails() {
+        if (this.invoice != null) {
+            this.listInvoiceDetailses = new ArrayList<InvoiceDetails>(this.invoice.getInvoiceDetailses());
+        }
+        return invoiceDetails;
+    }
+
+    public void addInvoiceDetails() {
+        this.invoice.addInvoiceDetails(listInvoiceDetailses);
+        this.invoiceDetails = new InvoiceDetails();
+    }
+
+    public void removeInvoiceDetails(InvoiceDetails invoiceDetails) {
+        this.invoice.removeInvoiceDetails(invoiceDetails);
+    }
+
+    public void setInvoiceDetails(InvoiceDetails invoiceDetails) {
+        this.invoiceDetails = invoiceDetails;
+    }
+
+    public List<InvoiceDetails> getListInvoiceDetailses() {
+        return listInvoiceDetailses;
+    }
+
+    public void setListInvoiceDetailses(List<InvoiceDetails> listInvoiceDetailses) {
+        this.listInvoiceDetailses = listInvoiceDetailses;
+    }
+
+    public void onChangeProduct() {
+
+    }
+
+    @CatchException
+    public String onSave() {
+        logger.debug("inside on save");
+        this.invoice.getAuditInfo().setCreatedBy(this.securityUtility.getPrinciple().getUsername());
+        this.invoice.getAuditInfo().setCreatedOn(new Date());
+        this.invoiceManager.addNew(invoice);
+        Messages.addInfo(null, "Invoice generated successfully.");
+        return "pretty:invoice";
+    }
+
+}

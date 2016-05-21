@@ -1,0 +1,119 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+    template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="#{msg['menu.userManagement.role']}"></h:outputText>
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onSave="save" onCancel="pretty:invoice" />
+
+    </ui:define>
+    <ui:define name="content"> 
+        <h:form prependId="false" id="object">            
+            <h:messages globalOnly="false" />
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="Money Management &#187; Invoice &#187; Payment"/>                    
+                </f:facet>
+            </p:panel>
+
+            <h:panelGrid columns="2"    style="margin-bottom:10px" id="test" width="100%"
+                         border="0" >
+
+                <p:fieldset legend="Invoice Information">
+                    <h:panelGrid columns="2"    style="margin-bottom:30px;alignment-adjust: central;" id="detail_grid" 
+                                 border="0" columnClasses="columnLabelStyle,columnBlankLabelStyle" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Invoice Number:" />
+                        <h:outputText value="#{invoiceEditController.invoice.invoiceNumber}" style="font-weight: bold" />
+
+
+                        <h:outputText value="Biller:" />
+                        <h:outputText value="#{invoiceEditController.invoice.billerName}" style="font-weight: bold"/>
+
+                        <h:outputText value="Customer" />
+                        <h:outputText value="#{invoiceEditController.invoice.customerName}" style="font-weight: bold;width: 20%" />
+
+                    </h:panelGrid>
+                </p:fieldset>
+
+
+
+                <p:fieldset legend="Account Information">
+                    <h:panelGrid columns="2"    style="margin-bottom:10px" id="detail_grid1" 
+                                 border="0" columnClasses="columnLabelStyle,columnBlankLabelStyle" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Total:" />
+                        <h:outputText value="#{invoiceEditController.totalInvAmt }" style="font-weight: bold" >
+                            <f:convertNumber maxFractionDigits="2"/>
+                        </h:outputText>
+
+                        <h:outputText value="Paid:" />
+                        <h:outputText value="#{invoiceEditController.customerAccount.paidAmount}" style="font-weight: bold">
+                            <f:convertNumber maxFractionDigits="2"/>
+                        </h:outputText>
+
+
+                        <h:outputText value="Owing:" />
+                        <h:outputText value="#{invoiceEditController.owing}" style="font-weight: bold;">
+                            <f:convertNumber maxFractionDigits="2"/>
+                        </h:outputText>
+
+
+                    </h:panelGrid>
+                </p:fieldset>
+
+            </h:panelGrid>
+
+
+
+
+
+            <p:fieldset legend="Payment Information">
+                <h:panelGrid columns="4" id="payment_list" columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+                    <h:outputLabel for="date" value="Date:"/>
+                    <p:calendar id="date" value="#{invoiceEditController.payment.date}" pattern="MM/dd/yyyy" size="10" /> 
+                    <p:message for="date" />
+                    <p:tooltip for="date" value="Enter customer name " showEffect="fade" hideEffect="fade"/>
+
+                    <h:outputLabel for="amount" value="Amount: *" />
+                    <h:inputText id="amount" value="#{invoiceEditController.payment.amount}" required="true" size="14"/>
+                    <p:message for="amount" />
+                    <p:tooltip for="amount" value="Enter Amount " showEffect="fade" hideEffect="fade"/>
+
+
+
+                    <h:outputLabel for="payment_method" value="Payment Method/Type: *" />
+                    <h:selectOneMenu id="payment_method" value="#{invoiceEditController.payment.paymentType}" required="true"  >
+                        <f:selectItem itemLabel="Please Select ....." noSelectionOption="true" />  
+                        <f:selectItems value="#{helperUtility.paymentType}" />
+                    </h:selectOneMenu>
+                    <p:message for="payment_method" />
+                    <p:tooltip for="payment_method" value="Enter Payment method " showEffect="fade" hideEffect="fade"/>
+
+                    <h:outputLabel for="note" value="Note: *" />
+                    <h:inputTextarea id="note" value="#{invoiceEditController.payment.note}" rows="5" cols="50"/>
+                    <p:message for="note" />
+                    <p:tooltip for="note" value="Enter Amount " showEffect="fade" hideEffect="fade"/>
+
+                    <h:outputText value="" />
+                    <h:commandButton id="save"  value="Payment Process"  action="#{invoiceEditController.processPaymentInvoice}" />
+
+                </h:panelGrid>
+            </p:fieldset>
+
+
+
+
+
+        </h:form>
+
+
+
+    </ui:define>
+</ui:composition>

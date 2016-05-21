@@ -1,0 +1,84 @@
+<p:dataTable xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:prettyfaces="http://ocpsoft.com/prettyfaces" id="account_list"
+	var="account" value="#{customerBean.accounts}" paginator="true"
+	rows="10" paginatorPosition="bottom" rowIndexVar="index"
+	paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+	rowsPerPageTemplate="10,25,50"
+	rendered="#{not empty customerBean.accounts}"
+	style="font-size: medium;">
+
+	<f:facet name="header">
+		<h:outputText value="Accounts" />
+	</f:facet>
+	<p:column>
+		<f:facet name="header">
+			<h:outputText value="S.N #" />
+		</f:facet>
+		<h:outputText value="#{index+1}" />
+	</p:column>
+
+
+	<p:column sortBy="#{account.accountNumber}">
+		<f:facet name="header">
+			<h:outputText value="Account Number" />
+		</f:facet>
+		<h:outputText value="#{account.accountNumber}" />
+	</p:column>
+
+	<p:column sortBy="#{account.bankBranch.name}">
+		<f:facet name="header">
+			<h:outputText value="Branch" />
+		</f:facet>
+		<h:outputText value="#{account.bankBranch.name}" />
+	</p:column>
+
+
+	<p:column sortBy="#{account.type}">
+		<f:facet name="header">
+			<h:outputText value="Account Type" />
+		</f:facet>
+		<h:outputText value="#{account.type}" />
+	</p:column>
+
+	<p:column sortBy="#{account.active}">
+		<f:facet name="header">
+			<h:outputText value="Status" />
+		</f:facet>
+		<h:outputText value="#{account.active ? 'Active' :'Inactive '}" />
+	</p:column>
+
+	<p:column sortBy="#{account.order}">
+		<f:facet name="header">
+			<h:outputText value="Order" />
+		</f:facet>
+		<h:outputText value="#{account.order}" />
+	</p:column>
+
+	<p:column>
+		<f:facet name="header">
+			<h:outputText value=" " />
+		</f:facet>
+
+		<h:commandButton value="Remove" rendered="#{account.id == null}"
+			onclick="return confirm('Are you sure? Do you want to Remove ?');">
+			<f:ajax execute="@form"
+				listener="#{customerAccountBean.enableordisableAccount(account)}"
+				render=":object" />
+		</h:commandButton>
+
+
+		<h:outputText value="  " />
+		<h:commandButton value="Delete" rendered="#{account.id!= null}"
+				action="#{customerAccountBean.deleteAccount(account)}" styleClass="deleteButton"
+				onclick="return confirm('Are you sure? Do you want to delete ?');" />
+
+	</p:column>
+
+</p:dataTable>
+
+

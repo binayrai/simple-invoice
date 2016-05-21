@@ -1,0 +1,58 @@
+<p:panel
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:prettyfaces="http://ocpsoft.com/prettyfaces"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar" style="border: none;" >
+
+
+    <h:form prependId="false" id="payment_type_list_form">
+        <p:dataTable id="payment_list" var="account" value="#{customerEditController.listCustAccount}" 
+                     paginator="true" rows="25" paginatorPosition="bottom"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="25,50,100"
+                     rowIndexVar="index">
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['grid.serialNumber']}#" />
+                </f:facet>
+                <h:outputText value="#{index+1}" />
+            </p:column>
+
+            <p:column  style="text-align: right">
+                <f:facet name="header">
+                    <h:outputText value="Balance Forward" />
+                </f:facet>
+                <h:outputText value="#{account.balanceForwared}" />
+            </p:column>
+
+            <p:column style="text-align: right">
+                <f:facet name="header">
+                    <h:outputText value="Current Amt" />
+
+                </f:facet>
+                <h:outputText value="#{account.currentAmount}" />
+            </p:column>
+
+            <p:column style="text-align: right">
+                <f:facet name="header">
+                    <h:outputText value="Total Amt" />
+
+                </f:facet>
+                <h:outputText value="#{account.totalAmount}" />
+            </p:column>
+            <p:column style="text-align: right">
+                <f:facet name="header">
+                    <h:outputText value="Paid Amt" />
+
+                </f:facet>
+                <h:outputText value="#{account.paidAmount}" />
+            </p:column>
+
+
+        </p:dataTable>
+    </h:form>
+</p:panel>

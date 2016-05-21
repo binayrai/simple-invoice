@@ -1,0 +1,78 @@
+package com.itexpertnepal.simpleinvoice.ui.security;
+
+import com.itexpertnepal.simpleinvoice.domain.common.Role;
+import com.itexpertnepal.simpleinvoice.domain.common.User;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.GrantedAuthority;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component("assembler")
+@Scope("singleton")
+class Assembler implements Serializable {
+
+    private static final Logger LOG = Logger.getLogger(Assembler.class.getName());
+
+    UserDetails buildUserFromUserEntity(User userEntity) {
+        String username = userEntity.getUserName();
+        String password = userEntity.getPassword();
+        boolean enabled = true;
+        boolean accountNonExpired = true;
+        boolean credentialsNonExpired = true;
+        boolean accountNonLocked = true;
+        LOG.log(Level.INFO, "{0}@{1}", new Object[]{username, password});
+        Collection<GrantedAuthority> authority = new ArrayList<GrantedAuthority>();
+        for (Role role : userEntity.getRoles()) {
+            authority.add(new CustomGrantedAuthorityImpl(role.permissionAsStringList(), role.getRoleName()));
+        }
+        CustomSpringSecurityUser user = new CustomSpringSecurityUser(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authority, userEntity.getRoleType(), userEntity.getCompanyCode(), userEntity.getClientCode());
+
+        return user;
+    }
+
+    private class SpringAuthority implements GrantedAuthority {
+
+        private final String authority;
+
+        public SpringAuthority(String authority) {
+            this.authority = authority;
+        }
+
+        @Override
+        public String getAuthority() {
+            return this.authority;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 61 * hash + (this.authority != null ? this.authority.hashCode() : 0);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final SpringAuthority other = (SpringAuthority) obj;
+            if ((this.authority == null) ? (other.authority != null) : !this.authority.equals(other.authority)) {
+                return false;
+            }
+            return true;
+        }
+    }
+}

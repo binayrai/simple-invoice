@@ -1,0 +1,70 @@
+package com.itexpertnepal.simpleinvoice.domain.common;
+
+public enum Permission {
+
+    /**
+     * Default Permission *
+     */
+    PROFILE_UPDATE,
+    /**
+     * company
+     */
+    COMPANY_ADD, COMPANY_EDIT, COMPANY_DELETE, COMPANY_VIEW, COMPANY_VERIFY,
+    /**
+     * User Permission *
+     */
+    USER_ADD, USER_EDIT, USER_DELETE, USER_VIEW, USER_VERIFY,
+    /**
+     * Role Permission *
+     */
+    ROLE_ADD, ROLE_EDIT, ROLE_DELETE, ROLE_VIEW, ROLE_VERIFY,
+    /**
+     * Bank Permission
+     */
+    BANK_ADD, BANK_EDIT, BANK_DELETE, BANK_VIEW, BANK_VERIFY,
+    /**
+     * Member Permission
+     */
+    MEMBER_ADD, MEMBER_EDIT, MEMBER_DELETE, MEMBER_VIEW, MEMBER_VERIFY,
+    /**
+     * Scheme Permission
+     */
+    SCHEME_ADD, SCHEME_EDIT, SCHEME_DELETE, SCHEME_VIEW, SCHEME_VERIFY,
+    /**
+     * Fee permission
+     */
+    FEE_ADD, FEE_EDIT, FEE_DELETE, FEE_VIEW, FEE_VERIFY,
+    /**
+     * Interest permission
+     */
+    INTEREST_ADD, INTEREST_EDIT, INTEREST_DELETE, INTEREST_VIEW, INTEREST_VERIFY,
+    /**
+     * Product permission
+     */
+    PRODUCT_ADD, PRODUCT_EDIT, PRODUCT_DELETE, PRODUCT_VIEW, PRODUCT_VERIFY,
+    /**
+     * Request type permission
+     */
+    REQUEST_TYPE_ADD, REQUEST_TYPE_EDIT, REQUEST_TYPE_DELETE, REQUEST_TYPE_VIEW, REQUEST_TYPE_VERIFY,
+    /**
+     * Sub product permission
+     */
+    SUB_PRODUCT_ADD, SUB_PRODUCT_EDIT, SUB_PRODUCT_DELETE, SUB_PRODUCT_VIEW, SUB_PRODUCT_VERIFY,
+    /**
+     * Agent permission
+     */
+    AGENT_ADD, AGENT_EDIT, AGENT_DELETE, AGENT_VIEW, AGENT_VERIFY,
+    /**
+     * Sub Agent permission
+     */
+    SUB_AGENT_ADD, SUB_AGENT_EDIT, SUB_AGENT_DELETE, SUB_AGENT_VIEW, SUB_AGENT_VERIFY,
+    /**
+     * Fund permission
+     */
+    FUND_ADD, FUND_EDIT, FUND_DELETE, FUND_VIEW, FUND_VERIFY,
+    /**
+     * *
+     * Transaction Permission
+     */
+    TRANSACTION_ADD, TRANSACTION_EDIT, TRANSACTION_DELETE, TRANSACTION_VIEW, TRANSACTION_VERIFY
+}

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.2.0"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.2.0
+               http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.2.0.xsd">
+
+    <url-mapping id="home">
+        <pattern>
+            /secured/home
+        </pattern>
+        <view-id>/WEB-INF/faces/home.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="login">
+        <pattern>/login</pattern>
+        <view-id>/login.xhtml</view-id>
+        <action>#{loginBean.load}</action>
+    </url-mapping>
+    
+            
+    <url-mapping id="logout">
+        <pattern value="/logout" />
+        <view-id value="/j_spring_security_logout" />
+    </url-mapping>
+    
+    <!-- Preferences Begins -->
+    <url-mapping id="myPreferences">
+        <pattern>
+            /secured/preferences
+        </pattern>
+        <view-id>/WEB-INF/faces/preferences.xhtml</view-id>
+    </url-mapping>
+    <!-- Preferences Ends -->  
+    
+
+    
+    <!-- company Begins -->
+    <url-mapping id="companies">
+        <pattern>
+            /secured/company
+        </pattern>
+        <view-id>/WEB-INF/faces/common/company/index.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="add_companies">
+        <pattern>
+            /secured/company/add
+        </pattern>
+        <view-id>/WEB-INF/faces/common/company/add.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_companies">
+        <pattern>
+            /secured/company/#{companyEditController.selectedCode}/edit
+        </pattern>
+        <action phaseId="RENDER_RESPONSE" onPostback="false">#{companyEditController.loadCompanies}</action>
+        <view-id>/WEB-INF/faces/common/company/edit.xhtml</view-id>
+    </url-mapping>
+    
+    <!-- Company Ends -->    
+    
+    
+    <!-- User Begins -->
+    <url-mapping id="users">
+        <pattern>
+            /secured/users
+        </pattern>
+        <view-id>/WEB-INF/faces/common/user/index.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="add_user">
+        <pattern>
+            /secured/users/add
+        </pattern>
+        <view-id>/WEB-INF/faces/common/user/add.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_user">
+        <pattern>
+            /secured/users/#{userEditController.selectedUserName}/edit
+        </pattern>
+        <action phaseId="RENDER_RESPONSE" onPostback="false">#{userEditController.loadUsers}</action>
+        <view-id>/WEB-INF/faces/common/user//edit.xhtml</view-id>
+    </url-mapping>
+    
+    
+    <!-- User Ends -->
+    
+    
+    <!-- Roles Begins -->
+    <url-mapping id="roles">
+        <pattern>
+            /secured/roles
+        </pattern>
+        <view-id>/WEB-INF/faces/common/role/index.xhtml</view-id>
+    </url-mapping>
+    <url-mapping id="add_role">
+        <pattern>
+            /secured/roles/add
+        </pattern>
+        <view-id>/WEB-INF/faces/common/role/add.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_role">
+        <pattern>
+            /secured/roles/#{roleEditController.selectedRoleId}/edit
+        </pattern>
+        <action phaseId="RENDER_RESPONSE" onPostback="false">#{roleEditController.loadRoles}</action>
+        <view-id>/WEB-INF/faces/common/role/edit.xhtml</view-id>
+    </url-mapping>
+    
+    <!-- Role Ends -->
+
+    <!-- Payment Types Begins -->
+    <url-mapping id="payment_types">
+        <pattern>
+            /secured/payment
+        </pattern>
+        <view-id>/WEB-INF/faces/setting/payment_types/index.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="add_payment_types">
+        <pattern>
+            /secured/payment/add
+        </pattern>
+        <view-id>/WEB-INF/faces/setting/payment_types/add.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_payment_types">
+        <pattern>
+            /secured/payment/#{paymentTypesEditController.selectedId}/edit
+        </pattern>
+        <action phaseId="RENDER_RESPONSE" onPostback="false">#{paymentTypesEditController.loadPaymentTypes}</action>
+        <view-id>/WEB-INF/faces/setting/payment_types/edit.xhtml</view-id>
+    </url-mapping>
+    
+    <!-- Payment Types Ends -->       
+    
+    <!-- Tax Rates Begins -->
+    <url-mapping id="tax_rates">
+        <pattern>
+            /secured/tax
+        </pattern>
+        <view-id>/WEB-INF/faces/setting/tax_rates/index.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="add_tax_rates">
+        <pattern>
+            /secured/tax/add
+        </pattern>
+        
+        <view-id>/WEB-INF/faces/setting/tax_rates/add.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_tax_rates">
+        <pattern>
+            /secured/tax/#{taxRateEditController.selectedId}/edit
+        </pattern>
+        <action phaseId="RENDER_RESPONSE" onPostback="false">#{taxRateEditController.loadTaxRates}</action>
+        <view-id>/WEB-INF/faces/setting/tax_rates/edit.xhtml</view-id>
+    </url-mapping>
+    
+    <!-- Tax Rates Ends -->  
+    
+        
+    <!-- Payment Types Ends -->       
+    
+    <!-- Products Begins -->
+    <url-mapping id="products">
+        <pattern>
+            /secured/products
+        </pattern>
+        <view-id>/WEB-INF/faces/products/index.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="add_products">
+        <pattern>
+            /secured/products/add
+        </pattern>
+        <view-id>/WEB-INF/faces/products/add.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_products">
+        <pattern>
+            /secured/products/#{productEditController.code}/edit
+        </pattern>
+        <action phaseId="RENDER_RESPONSE" onPostback="false">#{productEditController.loadProducts}</action>
+        <view-id>/WEB-INF/faces/products/edit.xhtml</view-id>
+    </url-mapping>
+    
+   
+    
+    <!-- Products Ends --> 
+    
+    <!-- Invoice Begins -->
+    <url-mapping id="invoice">
+        <pattern>
+            /secured/invoice
+        </pattern>
+        <view-id>/WEB-INF/faces/money/invoice/index.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="add_invoice">
+        <pattern>
+            /secured/invoice/add
+        </pattern>
+        <view-id>/WEB-INF/faces/money/invoice/add.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_invoice">
+        <pattern>
+            /secured/invoice/edit
+        </pattern>
+        <view-id>/WEB-INF/faces/money/invoice/edit.xhtml</view-id>
+    </url-mapping>
+  
+    <!-- Invoice Ends --> 
+   
+    <!-- Recurrence Begins --> 
+    <url-mapping id="recurrence">
+        <pattern>
+            /secured/recurrence
+        </pattern>
+        <view-id>/WEB-INF/faces/money/recurrence/index.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="add_recurrence">
+        <pattern>
+            /secured/recurrence/add
+        </pattern>
+        <view-id>/WEB-INF/faces/money/recurrence/add.xhtml</view-id>
+    </url-mapping>
+    
+   
+    
+    <!-- Recurrence Ends -->
+    <url-mapping id="payments">
+        <pattern>
+            /secured/payments
+        </pattern>
+        <view-id>/WEB-INF/faces/money/payments/index.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="add_payments">
+        <pattern>
+            /secured/payments/add
+        </pattern>
+        <view-id>/WEB-INF/faces/payments/add.xhtml</view-id>
+    </url-mapping>
+     
+    
+    <!-- Payment Ends -->
+    
+    <!-- Customers Begins -->
+    <url-mapping id="customers">
+        <pattern>
+            /secured/customers
+        </pattern>
+        <view-id>/WEB-INF/faces/people/customer/index.xhtml</view-id>
+        
+    </url-mapping>
+    
+    <url-mapping id="add_customers">
+        <pattern>
+            /secured/customers/add
+        </pattern>
+        <view-id>/WEB-INF/faces/people/customer/manage.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_customers">
+        <pattern>
+            /secured/customers/#{customerEditController.selectedCustomerCode}/edit
+        </pattern>
+        <action phaseId="RENDER_RESPONSE" onPostback="false">#{customerEditController.loadCustomer}</action>
+        <view-id>/WEB-INF/faces/people/customer/manage_edit.xhtml</view-id>
+    </url-mapping>
+    
+    <!-- Customers Ends --> 
+    
+    
+    <!-- Biller Begins -->
+    <url-mapping id="biller">
+        <pattern>
+            /secured/biller
+        </pattern>
+        <view-id>/WEB-INF/faces/people/biller/index.xhtml</view-id>
+        
+    </url-mapping>
+    
+    <url-mapping id="add_biller">
+        <pattern>
+            /secured/biller/add
+        </pattern>
+        <view-id>/WEB-INF/faces/people/biller/add.xhtml</view-id>
+    </url-mapping>
+    
+    <url-mapping id="edit_biller">
+        <pattern>
+            /secured/biller/#{billerEditController.selectedCode}/edit
+        </pattern>
+        <action phaseId="RENDER_RESPONSE" onPostback="false">#{billerEditController.loadProducts}</action>
+        <view-id>/WEB-INF/faces/people/biller/edit.xhtml</view-id>
+    </url-mapping>
+    
+    <!-- Biller Ends --> 
+    
+</pretty-config>
+

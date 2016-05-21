@@ -1,0 +1,192 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+    template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="#{msg['menu.userManagement.role']}"></h:outputText>
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onSave="save" onCancel="pretty:roles" savePermissionKey="ROLE_ADD"/>
+    </ui:define>
+    <ui:define name="content">
+
+        <h:form prependId="false" id="object">            
+            <h:messages globalOnly="false" />
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="User Management &#187; Role &#187; New"/>                    
+                </f:facet>
+            </p:panel>
+            <h:panelGrid columns="3" id="user_role">
+
+
+                <h:outputLabel for="user_role_name" value="Role Name: *" />
+                <h:inputText id="user_role_name" value="#{roleAddController.role.roleName}"
+                             required="true" />
+                <p:message for="user_role_name" />
+
+            </h:panelGrid>
+
+            <p:panel  style="border: none;">
+                <f:facet name="header">
+                    #{msg['user.role.permission']}
+                </f:facet>
+
+
+                <h:panelGrid columns="6">  
+                    <!-- User Permission Start-->
+                    <p:fieldset legend="User Permission" >
+                        <h:panelGrid columns="5" id="per">
+
+
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedUserPermission}" >
+                                <f:selectItem itemLabel="Add" itemValue="USER_ADD" rendered="#{menuChecker.hasRight('USER_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="USER_EDIT" rendered="#{menuChecker.hasRight('USER_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="USER_DELETE" rendered="#{menuChecker.hasRight('USER_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="USER_VIEW" rendered="#{menuChecker.hasRight('USER_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="USER_VERIFY" rendered="#{menuChecker.hasRight('USER_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!-- User Permission End-->
+
+                    <!-- Role Permission Start-->
+                    <p:fieldset legend="Role Permission" >
+                        <h:panelGrid columns="5" id="role">
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedRolePermission}">
+                                <f:selectItem itemLabel="Add" itemValue="ROLE_ADD" rendered="#{menuChecker.hasRight('ROLE_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="ROLE_EDIT" rendered="#{menuChecker.hasRight('ROLE_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="ROLE_DELETE" rendered="#{menuChecker.hasRight('ROLE_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="ROLE_VIEW" rendered="#{menuChecker.hasRight('ROLE_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="ROLE_VERIFY" rendered="#{menuChecker.hasRight('ROLE_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!-- Role Permission End-->
+                    
+                      <!-- Tax Rate Permission Start-->
+                    <p:fieldset legend="Tax Rate Permission" >
+                        <h:panelGrid columns="5" id="tax_rate">
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedRolePermission}">
+                                <f:selectItem itemLabel="Add" itemValue="TAX_RATE_ADD" rendered="#{menuChecker.hasRight('TAX_RATE_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="TAX_RATE_EDIT" rendered="#{menuChecker.hasRight('TAX_RATE_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="TAX_RATE_DELETE" rendered="#{menuChecker.hasRight('TAX_RATE_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="TAX_RATE_VIEW" rendered="#{menuChecker.hasRight('TAX_RATE_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="TAX_RATE_VERIFY" rendered="#{menuChecker.hasRight('TAX_RATE_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!-- Tax Rate Permission End-->
+                    
+                        <!-- Products Permission Starts-->
+                    <p:fieldset legend="Product Permission" >
+                        <h:panelGrid columns="5" id="product">
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedProductsPermission}">
+                                <f:selectItem itemLabel="Add" itemValue="PRODUCT_ADD" rendered="#{menuChecker.hasRight('PRODUCT_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="PRODUCT_EDIT" rendered="#{menuChecker.hasRight('PRODUCT_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="PRODUCT_DELETE" rendered="#{menuChecker.hasRight('PRODUCT_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="PRODUCT_VIEW" rendered="#{menuChecker.hasRight('PRODUCT_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="PRODUCT_VERIFY" rendered="#{menuChecker.hasRight('PRODUCT_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!-- Products Permission End-->
+
+                    <!-- Customers Starts-->
+                    <p:fieldset legend="Customers Permission" >
+                        <h:panelGrid columns="5" id="customers">
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedCustomersPermission}">
+                                <f:selectItem itemLabel="Add" itemValue="CUSTOMER_ADD" rendered="#{menuChecker.hasRight('CUSTOMER_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="CUSTOMER_EDIT" rendered="#{menuChecker.hasRight('CUSTOMER_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="CUSTOMER_DELETE" rendered="#{menuChecker.hasRight('CUSTOMER_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="CUSTOMER_VIEW" rendered="#{menuChecker.hasRight('CUSTOMER_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="CUSTOMER_VERIFY" rendered="#{menuChecker.hasRight('CUSTOMER_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!--  Customers Permission End-->
+                    
+                      <!-- Billers Starts-->
+                    <p:fieldset legend="Billers Permission" >
+                        <h:panelGrid columns="5" id="billers">
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedBillersPermission}">
+                                <f:selectItem itemLabel="Add" itemValue="BILLER_ADD" rendered="#{menuChecker.hasRight('BILLER_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="BILLER_EDIT" rendered="#{menuChecker.hasRight('BILLER_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="BILLER_DELETE" rendered="#{menuChecker.hasRight('BILLER_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="BILLER_VIEW" rendered="#{menuChecker.hasRight('BILLER_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="BILLER_VERIFY" rendered="#{menuChecker.hasRight('BILLER_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!--  Billers Permission End-->
+                    
+                    
+                     <!-- Invoice Starts-->
+                    <p:fieldset legend="Invoice Permission" >
+                        <h:panelGrid columns="5" id="invoice">
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedInvoicePermission}">
+                                <f:selectItem itemLabel="Add" itemValue="INVOICE_ADD" rendered="#{menuChecker.hasRight('INVOICE_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="INVOICE_EDIT" rendered="#{menuChecker.hasRight('INVOICE_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="INVOICE_DELETE" rendered="#{menuChecker.hasRight('INVOICE_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="INVOICE_VIEW" rendered="#{menuChecker.hasRight('INVOICE_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="INVOICE_VERIFY" rendered="#{menuChecker.hasRight('INVOICE_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!--  Invoice Permission End-->
+                    
+                     <!-- Recurrence Starts-->
+                    <p:fieldset legend="Recurrence Permission" >
+                        <h:panelGrid columns="5" id="recurrence">
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedRecurrencePermission}">
+                                <f:selectItem itemLabel="Add" itemValue="RECURRENCE_ADD" rendered="#{menuChecker.hasRight('RECURRENCE_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="RECURRENCE_EDIT" rendered="#{menuChecker.hasRight('RECURRENCE_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="RECURRENCE_DELETE" rendered="#{menuChecker.hasRight('RECURRENCE_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="RECURRENCE_VIEW" rendered="#{menuChecker.hasRight('RECURRENCE_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="RECURRENCE_VERIFY" rendered="#{menuChecker.hasRight('RECURRENCE_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!--  Recurrence Permission End-->
+                    
+                     <!-- Payment Starts-->
+                    <p:fieldset legend="Payment Permission" >
+                        <h:panelGrid columns="5" id="payment">
+
+                            <p:selectManyCheckbox value="#{roleAddController.selectedPaymentPermission}">
+                                <f:selectItem itemLabel="Add" itemValue="PAYMENT_ADD" rendered="#{menuChecker.hasRight('PAYMENT_ADD')}"/>
+                                <f:selectItem itemLabel="Edit" itemValue="PAYMENT_EDIT" rendered="#{menuChecker.hasRight('PAYMENT_EDIT')}"/> 
+                                <f:selectItem itemLabel="Delete" itemValue="PAYMENT_DELETE" rendered="#{menuChecker.hasRight('PAYMENT_DELETE')}"/> 
+                                <f:selectItem itemLabel="View" itemValue="PAYMENT_VIEW" rendered="#{menuChecker.hasRight('PAYMENT_VIEW')}"/> 
+                                <f:selectItem itemLabel="Verify" itemValue="PAYMENT_VERIFY" rendered="#{menuChecker.hasRight('PAYMENT_VERIFY')}"/> 
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <!--  Payment Permission End-->
+
+                </h:panelGrid>
+
+
+
+                <!-- Transacton Permission End-->
+                <h:commandButton id="save" action="#{roleAddController.onSave}" value="Save" style="display: none"  />
+
+            </p:panel>
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>

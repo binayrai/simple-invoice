@@ -1,0 +1,13 @@
+package com.itexpertnepal.simpleinvoice.api.common;
+
+import com.itexpertnepal.simpleinvoice.domain.common.Role;
+
+/**
+ *
+ * @author binay
+ */
+public interface RoleManager extends CrudService<Role, Long> {
+
+    public Role findByRoleName(String roleName);
+
+}

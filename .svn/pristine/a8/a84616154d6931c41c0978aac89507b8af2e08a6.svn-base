@@ -1,0 +1,200 @@
+package com.itexpertnepal.simpleinvoice.domain;
+
+import com.itexpertnepal.simpleinvoice.domain.common.AbstractEntity;
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+
+/**
+ *
+ * @author binay
+ */
+@Entity
+@Table(name = "customers")
+public class Customer extends AbstractEntity implements Serializable {
+
+    private String code;
+    private String name;
+    private String accountNumber;
+    private int contact;
+    private String streetAddress;
+    private String streetAddressTwo;
+    private String city;
+    private String state;
+    private String zipCode;
+    private String country;
+    private int phoneNo;
+    private int mobileNo;
+    private int fax;
+    private String emial;
+    private String creditCardHolderName;
+    private String creditCardNo;
+    private Date creditCardExpiryDate;
+    private String customFieldOne;
+    private String customFieldTwo;
+    private String note;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public int getContact() {
+        return contact;
+    }
+
+    public void setContact(int contact) {
+        this.contact = contact;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    public String getStreetAddressTwo() {
+        return streetAddressTwo;
+    }
+
+    public void setStreetAddressTwo(String streetAddressTwo) {
+        this.streetAddressTwo = streetAddressTwo;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public int getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(int phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public int getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(int mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public int getFax() {
+        return fax;
+    }
+
+    public void setFax(int fax) {
+        this.fax = fax;
+    }
+
+    public String getEmial() {
+        return emial;
+    }
+
+    public void setEmial(String emial) {
+        this.emial = emial;
+    }
+
+    public String getCreditCardHolderName() {
+        return creditCardHolderName;
+    }
+
+    public void setCreditCardHolderName(String creditCardHolderName) {
+        this.creditCardHolderName = creditCardHolderName;
+    }
+
+    public String getCreditCardNo() {
+        return creditCardNo;
+    }
+
+    public void setCreditCardNo(String creditCardNo) {
+        this.creditCardNo = creditCardNo;
+    }
+
+    @Temporal(javax.persistence.TemporalType.DATE)
+    public Date getCreditCardExpiryDate() {
+        return creditCardExpiryDate;
+    }
+
+    public void setCreditCardExpiryDate(Date creditCardExpiryDate) {
+        this.creditCardExpiryDate = creditCardExpiryDate;
+    }
+
+    public String getCustomFieldOne() {
+        return customFieldOne;
+    }
+
+    public void setCustomFieldOne(String customFieldOne) {
+        this.customFieldOne = customFieldOne;
+    }
+
+    public String getCustomFieldTwo() {
+        return customFieldTwo;
+    }
+
+    public void setCustomFieldTwo(String customFieldTwo) {
+        this.customFieldTwo = customFieldTwo;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+}

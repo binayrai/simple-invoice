@@ -1,0 +1,52 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:prettyfaces="http://ocpsoft.com/prettyfaces"
+    xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+    template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">
+    </ui:define>
+    <ui:define name="toolbar"/>
+    <ui:define name="content">
+
+        <h:form prependId="false" id="new_Agg">
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="Invoice Management &#187;Recurrence download &#187;All" />
+                </f:facet>
+            </p:panel>
+        </h:form>
+
+        <h:form prependId="false" id="company_list_form">
+
+            <p:ajaxStatus onstart="statusDialog.show();"
+                          onsuccess="statusDialog.hide();" />
+
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status"
+                      draggable="false" closable="false">
+                <h:graphicImage value="#{resource['images:ajaxloadingbar.gif']}" />
+            </p:dialog>
+
+            <p:fieldset legend="Download Automatic Generated PDF For Monthly/Quaterly">
+                <h:panelGrid columns="5" id="payment_list"  columnClasses="columnLabelStyle,columnBlankLabelStyle">
+
+                    <h:outputLabel for="date" value="Date:"/>
+                    <p:calendar id="date" value="#{listReocurrenceController.indexDate}" pattern="MM/dd/yyyy" size="10" rendered="true" maxdate="#{listReocurrenceController.futureDate}" required="true" /> 
+                    <p:message for="date" />
+                    <p:tooltip for="date" value="Enter re-occurance date for download invoice pdf " showEffect="fade" hideEffect="fade"/>
+                    <h:outputText value=""/> 
+
+                    <h:outputText value=""/> 
+                    <h:commandButton value="Download"  action="#{listReocurrenceController.downloadPdf}"  />
+                </h:panelGrid>
+
+            </p:fieldset>
+        </h:form>
+
+
+    </ui:define>
+</ui:composition>

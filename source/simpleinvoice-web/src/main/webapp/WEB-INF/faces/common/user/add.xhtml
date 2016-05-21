@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:component="http://java.sun.com/jsf/composite/components/toolbar"
+                template="/WEB-INF/templates/template.xhtml">
+    <ui:define name="title">
+        <h:outputText value=""></h:outputText>
+    </ui:define>
+    <ui:define name="toolbar">
+        <component:toolbar onSave="save" onCancel="pretty:users" savePermissionKey="USER_ADD"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:form prependId="false" id="object">
+            <h:messages globalOnly="false" />
+            <p:panel style="border: none;">
+                <f:facet name="header">
+                    <h:outputText value="User Management &#187; User &#187; New"/>     
+                </f:facet>
+            </p:panel>
+            <h:panelGrid  columns="5" id="user_entry">
+                <h:outputLabel for="user_id" style="width:100px;display: inline-block;" value="User Id: *" />
+                <h:inputText id="user_id" value="#{userAddController.user.userName}"
+                             required="true" size="30"/>
+                <p:message for="user_id" />
+                <h:outputText value=""/>
+                <p:tooltip for="user_id" value=" User name must be Email format." showEffect="fade" hideEffect="fade"/>
+
+
+                <h:outputLabel for="password" value="New Password: *" />
+                <h:inputSecret id="password" value="#{userAddController.newPassword}" size="20" required="true" redisplay="true"/>
+                <p:message for="password" />
+                <p:tooltip for="password" value="Enter password" showEvent="focus" hideEvent="blur"/>
+                <h:outputText value=""/>
+
+                <h:outputLabel for="confirmpassword" value="Comfirm Password:*" />
+                <h:inputSecret id="confirmpassword" value="#{userAddController.confirmPassword}" size="20" required="true" redisplay="true"/>
+                <p:message for="confirmpassword" />
+                <p:tooltip for="confirmpassword" value="Same as new password" showEvent="focus" hideEvent="blur"/>
+                <h:outputText value=""/>
+            </h:panelGrid>
+
+
+            <p:panel id="id" style="border: none;" header="Roles"/>
+            <h:panelGrid  columns="4" id="user_role">
+
+                <h:outputLabel for="role" value="Role: " style="width:100px;display: inline-block;"/>  
+                <p:selectManyCheckbox id="role"  layout="pageDirection" value="#{userAddController.roles}" converter="omnifaces.SelectItemsConverter">  
+                    <f:selectItems value="#{roleListController.roles}" var="role" itemLabel="#{role.roleName}" itemValue="#{role}"/>    
+                </p:selectManyCheckbox>  
+                <p:message for="role" />
+
+            </h:panelGrid>
+
+
+            <h:commandButton id="save" action="#{userAddController.onSave}" value="Save" style="display: none"  />
+        </h:form>
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,37 @@
+package com.itexpertnepal.simpleinvoice.ui.controller.role;
+
+import com.itexpertnepal.simpleinvoice.api.common.RoleManager;
+import com.itexpertnepal.simpleinvoice.domain.common.Role;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringRequestScoped;
+import com.itexpertnepal.simpleinvoice.ui.security.SpringSecurityUtility;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+@SpringRequestScoped
+public class RoleListController {
+
+    @Autowired
+    private RoleManager roleManager;
+
+    @Autowired
+    private SpringSecurityUtility securityUtility;
+    private List<Role> roles;
+
+    public List<Role> getRoles() {
+        if (this.roles == null) {
+            this.roles = this.roleManager.findAll();
+        }
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+}

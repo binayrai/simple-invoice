@@ -1,0 +1,75 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:composite="http://java.sun.com/jsf/composite"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <composite:interface>
+        <composite:attribute name="onNew" />
+        <composite:attribute name="onCancel" />
+        <composite:attribute name="onSave" />
+        <composite:attribute name="onDelete" />
+        <composite:attribute name="createMode" />
+        <composite:attribute name="onSearch" />
+        <!-- Permission Key -->
+        <composite:attribute name="newPermissionKey" />
+        <composite:attribute name="savePermissionKey" />
+        <composite:attribute name="updatePermissionKey" />
+        <composite:attribute name="deletePermissionKey" />
+
+
+
+
+    </composite:interface>
+
+    <!-- IMPLEMENTATION -->
+    <composite:implementation>
+
+        <h:form>
+            <h:button title="#{msg['button.addNew']}" outcome="#{cc.attrs.onNew}"
+                      image="#{resource['icons:add.png']}" rendered="#{menuChecker.hasRight(cc.attrs.newPermissionKey)}"
+                      />
+
+            <h:outputText value="&nbsp;" />
+
+            <p:commandButton title="#{msg['button.save']}" image="ui-icon-save"  style="display: none;">
+                <p:graphicImage value="#{resource['icons:save.png']}" onclick="document.getElementById('#{cc.attrs.onSave}').click();" 
+                                rendered="#{not empty cc.attrs.onSave and ((menuChecker.hasRight(cc.attrs.savePermissionKey))
+                                            or (menuChecker.hasRight(cc.attrs.updatePermissionKey)))}"/>
+                <!--<f:ajax event="click" execute="@this" render=":mess_form:msg_global" />-->
+            </p:commandButton>
+
+            <h:outputText value="&nbsp;" />
+            <h:outputText value="&nbsp;" />
+
+            <p:commandButton title="Enable/Disable" style="display: none;" 
+                             image="#{resource['icons:delete.png']}">
+                <p:graphicImage value="#{resource['icons:delete.png']}" 
+                                onclick="document.getElementById('#{cc.attrs.onDelete}').click();"
+                                rendered="#{not empty cc.attrs.onDelete and menuChecker.hasRight(cc.attrs.deletePermissionKey)}"/>                
+
+                <!--<f:ajax event="click" execute="@this" render=":mess_form:msg_global" />-->
+            </p:commandButton>
+
+            <h:outputText value="&nbsp;" />
+            <h:outputText value="&nbsp;" />
+            <h:button title="#{msg['button.back']}" outcome="#{cc.attrs.onCancel}"
+                      image="#{resource['icons:undo.png']}"
+                      rendered="#{not empty cc.attrs.onCancel}" />
+
+            <h:outputFormat value="">              
+                <p:commandButton title="Search" type="button" value="Search"
+                                 style="display: block" 
+                                 rendered="#{not empty cc.attrs.onSearch}"
+                                 onclick="document.getElementById('#{cc.attrs.onSearch}').click();">
+                </p:commandButton>
+            </h:outputFormat>
+
+        </h:form>
+    </composite:implementation>
+
+</ui:composition>

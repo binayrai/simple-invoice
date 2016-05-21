@@ -1,0 +1,299 @@
+package com.itexpertnepal.simpleinvoice.ui.controller.invoice;
+
+import com.itexpertnepal.simpleinvoice.api.CustomerManager;
+import com.itexpertnepal.simpleinvoice.api.InvoiceManager;
+import com.itexpertnepal.simpleinvoice.api.ProductManager;
+import com.itexpertnepal.simpleinvoice.api.TaxRateManager;
+import com.itexpertnepal.simpleinvoice.domain.Customer;
+import com.itexpertnepal.simpleinvoice.domain.Invoice;
+import com.itexpertnepal.simpleinvoice.domain.InvoiceDetails;
+import com.itexpertnepal.simpleinvoice.domain.Product;
+import com.itexpertnepal.simpleinvoice.domain.TaxRate;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringRequestScoped;
+import com.itexpertnepal.simpleinvoice.spring.jsf.annotation.SpringViewScoped;
+import com.itexpertnepal.simpleinvoice.ui.aspect.CatchException;
+import com.itexpertnepal.simpleinvoice.ui.pdf.facade.DownloadFileServlet;
+import com.itexpertnepal.simpleinvoice.ui.pdf.facade.PageHeadGenerator;
+import com.itexpertnepal.simpleinvoice.ui.pdf.facade.PdfGenerateUtility;
+import com.itexpertnepal.simpleinvoice.ui.pdf.facade.PdfGenerateUtility.BoldHead;
+import com.itexpertnepal.simpleinvoice.ui.security.SpringSecurityUtility;
+import com.itexpertnepal.simpleinvoice.utl.logger.Log;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.event.ActionEvent;
+import org.omnifaces.util.Messages;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author binay
+ */
+@Component
+@SpringViewScoped
+public class InvoiceEditController {
+
+    private String selectedInvoiceNo;
+    private Invoice invoice;
+    private InvoiceDetails invoiceDetails;
+    private List<InvoiceDetails> listInvoiceDetailses;
+    private List<TaxRate> listTaxRates;
+    private List<Product> listProducts;
+    private double subTotal;
+    private double invoiceTotal;
+
+    @Log
+    private Logger logger;
+    @Autowired
+    private InvoiceManager invoiceManager;
+    @Autowired
+    private SpringSecurityUtility securityUtility;
+    @Autowired
+    private TaxRateManager taxRateManager;
+    @Autowired
+    private ProductManager productManager;
+    @Autowired
+    private CustomerManager customerManager;
+    private static PdfWriter writer;
+    SimpleDateFormat format = new SimpleDateFormat("yyyyy-mm-dd");
+
+    @PostConstruct
+    public void init() {
+        this.invoice = new Invoice();
+        this.invoiceDetails = new InvoiceDetails();
+
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
+    public InvoiceDetails getInvoiceDetails() {
+        if (this.invoice != null) {
+            this.listInvoiceDetailses = new ArrayList<InvoiceDetails>(this.invoice.getInvoiceDetailses());
+            System.out.println("Invoice Details Size:" + this.invoice.getInvoiceDetailses().size());
+        }
+        return invoiceDetails;
+    }
+
+    public void addInvoiceDetails(ActionEvent event) {
+        logger.debug("inside invoice details");
+        this.invoice.addInvoiceDetails(invoiceDetails);
+        logger.debug("Details size:" + listInvoiceDetailses.size());
+        this.invoiceDetails = new InvoiceDetails();
+    }
+
+    public void removeInvoiceDetails(InvoiceDetails invoiceDetails) {
+        this.invoice.removeInvoiceDetails(invoiceDetails);
+    }
+
+    public void setInvoiceDetails(InvoiceDetails invoiceDetails) {
+        this.invoiceDetails = invoiceDetails;
+    }
+
+    public List<InvoiceDetails> getListInvoiceDetailses() {
+        return listInvoiceDetailses;
+    }
+
+    public void setListInvoiceDetailses(List<InvoiceDetails> listInvoiceDetailses) {
+        this.listInvoiceDetailses = listInvoiceDetailses;
+    }
+
+    public List<TaxRate> getListTaxRates() {
+        return listTaxRates;
+    }
+
+    public void setListTaxRates(List<TaxRate> listTaxRates) {
+        this.listTaxRates = listTaxRates;
+    }
+
+    public List<Product> getListProducts() {
+        if (this.listProducts == null) {
+            this.listProducts = this.productManager.findAllByGeneralInvoiceType();
+        }
+        return listProducts;
+    }
+
+    public void setListProducts(List<Product> listProducts) {
+        this.listProducts = listProducts;
+    }
+
+    @CatchException
+    public void loadSearchInvoice() {
+        if (selectedInvoiceNo != null) {
+            this.invoice = this.invoiceManager.findByInvoiceNumber(selectedInvoiceNo);
+            if (this.invoice != null) {
+                this.listInvoiceDetailses = new ArrayList<InvoiceDetails>(this.invoice.getInvoiceDetailses());
+            }
+
+        }
+    }
+
+    @CatchException
+    public void loadSearchInvoice(String invoiceNumber) throws DocumentException, IOException {
+        logger.debug("invoice number:" + invoiceNumber);
+        if (invoiceNumber != null) {
+            this.invoice = this.invoiceManager.findByInvoiceNumber(invoiceNumber);
+            if (this.invoice != null) {
+                this.listInvoiceDetailses = new ArrayList<InvoiceDetails>(this.invoice.getInvoiceDetailses());
+            }
+            this.invoicePdfGeneration(invoice);
+
+        }
+    }
+
+    public void onChangeProduct() {
+        logger.debug("inside change product");
+        if (this.invoiceDetails.getProductCode() != null) {
+            Product product = this.productManager.findByCode(this.invoiceDetails.getProductCode());
+            if (product != null) {
+                this.listTaxRates = new ArrayList<TaxRate>();
+                logger.debug("inside product not null");
+                TaxRate taxRate = this.taxRateManager.find(product.getDefaultTax());
+                this.listTaxRates.add(taxRate);
+                this.invoiceDetails.setUnitPrice(taxRate.getRate());
+
+            } else {
+                Messages.addInfo(null, "cannot read product ");
+            }
+        }
+
+    }
+
+    public String getSelectedInvoiceNo() {
+        return selectedInvoiceNo;
+    }
+
+    public void setSelectedInvoiceNo(String selectedInvoiceNo) {
+        this.selectedInvoiceNo = selectedInvoiceNo;
+    }
+
+    public void loadInvoice() {
+        if (selectedInvoiceNo != null) {
+            this.invoice = this.invoiceManager.findByInvoiceNumber(selectedInvoiceNo);
+        }
+    }
+
+    public void searchLoad() {
+        if (selectedInvoiceNo != null) {
+
+        }
+
+    }
+
+    public double getSubTotal() {
+        if (!this.invoice.getInvoiceDetailses().isEmpty()) {
+            for (InvoiceDetails details : this.invoice.getInvoiceDetailses()) {
+                this.subTotal += details.getQuantity() * details.getUnitPrice();
+            }
+        }
+        return subTotal;
+    }
+
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public double getInvoiceTotal() {
+        if (!this.invoice.getInvoiceDetailses().isEmpty()) {
+            for (InvoiceDetails details : this.invoice.getInvoiceDetailses()) {
+                this.invoiceTotal += details.getQuantity() * details.getUnitPrice();
+            }
+        }
+        return invoiceTotal;
+    }
+
+    public void setInvoiceTotal(double invoiceTotal) {
+        this.invoiceTotal = invoiceTotal;
+    }
+
+    @CatchException
+    public String onUpdate() {
+        logger.debug("inside update");
+        this.invoice.getAuditInfo().setModifiedBy(this.securityUtility.getPrinciple().getUsername());
+        this.invoice.getAuditInfo().setModifiedOn(new Date());
+        this.invoiceManager.update(invoice);
+        Messages.addInfo(null, "Invoice re-generated successfully.");
+        return "pretty:invoice";
+    }
+
+    @CatchException
+    public void invoicePdfGeneration(Invoice invoice) throws DocumentException, FileNotFoundException, IOException {
+        try {
+
+            Customer customer = this.customerManager.findByCode(invoice.getCustomerCode());
+            if (customer == null) {
+                throw new IllegalArgumentException("Customer is null.");
+            }
+
+            logger.debug("inside pdf generation.");
+            final String filePath = "C:\\invoice_" + invoice.getInvoiceNumber() + ".pdf";
+
+            Document document = new Document(PageSize.A4);
+            writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+            writer.setPageEvent(new PageHeadGenerator());
+            logger.debug("Pdf page head generated");
+            logger.debug("date withoutformat :" + invoice.getAuditInfo().getCreatedOn());
+            logger.debug("date format :" + format.format(invoice.getAuditInfo().getCreatedOn()));
+            double total = 0.0;
+            PdfGenerateUtility.PlaceChunck("Account No.", 380, 710, BoldHead.TIMES_BOLD, writer);
+            PdfGenerateUtility.PlaceChunck("Invoice No.", 380, 698, BoldHead.TIMES_BOLD, writer);
+            PdfGenerateUtility.PlaceChunck("Statement Date.", 380, 686, BoldHead.TIMES_BOLD, writer);
+            PdfGenerateUtility.PlaceChunck(customer.getAccountNumber(), 445, 710, BoldHead.TIMES_ROMAN, writer);
+            PdfGenerateUtility.PlaceChunck(String.valueOf(invoice.getInvoiceNumber()), 445, 698, BoldHead.TIMES_ROMAN, writer);
+            PdfGenerateUtility.PlaceChunck(format.format(invoice.getAuditInfo().getCreatedOn()).trim(), 445, 686, BoldHead.TIMES_ROMAN, writer);
+
+            PdfGenerateUtility.PlaceChunck(customer.getName(), 35, 710, BoldHead.TIMES_BOLD, writer);
+            PdfGenerateUtility.PlaceChunck(customer.getStreetAddress(), 35, 698, BoldHead.TIMES_ROMAN, writer);
+            PdfGenerateUtility.PlaceChunck(customer.getStreetAddressTwo(), 35, 686, BoldHead.TIMES_ROMAN, writer);
+
+            PdfGenerateUtility.PlaceChunck("DATE", 35, 660, BoldHead.TIMES_BOLD, writer);
+            PdfGenerateUtility.PlaceChunck("Description", 100, 660, BoldHead.TIMES_BOLD, writer);
+            PdfGenerateUtility.PlaceChunck("AMOUNT", 500, 660, BoldHead.TIMES_BOLD, writer);
+            int yCoordinate = 610;
+            int invoiceSize = invoice.getInvoiceDetailses().size();
+            for (InvoiceDetails details : invoice.getInvoiceDetailses()) {
+
+                PdfGenerateUtility.PlaceChunck(format.format(details.getAuditInfo().getCreatedOn()), 35, yCoordinate, BoldHead.TIMES_ROMAN, writer);
+                PdfGenerateUtility.PlaceChunck(details.getProductCode(), 100, yCoordinate, BoldHead.TIMES_ROMAN, writer);
+                PdfGenerateUtility.PlaceChunck(String.valueOf(details.getUnitPrice() * details.getQuantity()), 500, yCoordinate, BoldHead.TIMES_ROMAN, writer);
+
+                total += details.getUnitPrice() * details.getQuantity();
+                yCoordinate -= 20;
+
+            }
+
+            // PlaceChunck("Balance Forward", 300, 640);
+            //PlaceChunck2(String.valueOf(cus.getSalary()), 500, 640);
+            PdfGenerateUtility.PlaceChunck("Total Amount Due", 300, 575 - (invoiceSize * 10), BoldHead.TIMES_BOLD, writer, invoiceSize);
+
+            PdfGenerateUtility.PlaceChunck(String.valueOf(total), 500, 575 - (invoiceSize * 10), BoldHead.TIMES_ROMAN, writer, invoiceSize);
+
+            document.close();
+
+            //download and save pdf file            
+            DownloadFileServlet.downloadPDF(invoice.getInvoiceNumber());
+            logger.debug("Pdf generation successful");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+}

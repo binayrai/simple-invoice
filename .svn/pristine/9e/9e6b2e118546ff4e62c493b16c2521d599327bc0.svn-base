@@ -1,0 +1,56 @@
+package com.itexpertnepal.simpleinvoice.ui.pdf.facade;
+
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+/**
+ *
+ * @author binay
+ */
+
+public class PageHeadGenerator extends PdfPageEventHelper {
+
+    @Override
+    public void onParagraph(PdfWriter writer, Document document, float paragraphPosition) {
+        super.onParagraph(writer, document, paragraphPosition);
+
+//To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void onEndPage(PdfWriter writer, Document document) {
+        super.onEndPage(writer, document); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String imageUrl = "/home/binay/Desktop/emersonnlee_logo.png";
+
+            Image image = Image.getInstance(imageUrl);
+            image.setAbsolutePosition(400f, 750f);
+            image.scaleAbsolute(100f, 70f);
+            document.add(image);
+            Paragraph para = new Paragraph();
+            para.add(new Chunk("EMERSON H. LEE", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.BOLD | Font.UNDERLINE)));
+            para.add(new Chunk("\n Accounting, Tax and Payroll Services Inc." + "", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL | Font.NORMAL)));
+            para.add(new Chunk("\n 6329 Arlington Bivd, Unit G", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL | Font.NORMAL)));
+            para.add(new Chunk("\n Falls Church, VA 22044" + "", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL | Font.NORMAL)));
+            para.add(new Chunk("\n Tel:(703)237-5404 " + "", FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL | Font.NORMAL)));
+            para.setLeading(0, 1);
+            document.add(para);
+        } catch (DocumentException ex) {
+            Logger.getLogger(PageHeadGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PageHeadGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+}
